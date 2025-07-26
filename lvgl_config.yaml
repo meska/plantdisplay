@@ -1,0 +1,765 @@
+# Configurazione LVGL per PlantDisplay
+# Contiene tutta l'interfaccia grafica
+
+# Plant images
+image:
+    - file: "assets/Anthurium.jpg"
+      id: anthurium_img
+      resize: 120x120
+      type: RGB565
+    - file: "assets/Alstroemeria.jpg"
+      id: alstroemeria_img
+      resize: 120x120
+      type: RGB565
+    - file: "assets/Ggraptosedum.jpg"
+      id: graptosedum_img
+      resize: 120x120
+      type: RGB565
+
+# Font necessari per LVGL con caratteri speciali
+font:
+    - file: "gfonts://Montserrat"
+      id: montserrat_10
+      size: 10
+      glyphs: "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~ àáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞß°µ€"
+
+    - file: "gfonts://Montserrat"
+      id: montserrat_12
+      size: 12
+      glyphs: "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~ àáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞß°µ€"
+
+    - file: "gfonts://Montserrat"
+      id: montserrat_14
+      size: 14
+      glyphs: "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~ àáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞß°µ€"
+
+    - file: "gfonts://Montserrat"
+      id: montserrat_16
+      size: 16
+      glyphs: "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~ àáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞß°µ€"
+
+    - file: "gfonts://Montserrat"
+      id: montserrat_20
+      size: 20
+      glyphs: "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~ àáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞß°µ€"
+
+    - file: "gfonts://Montserrat"
+      id: montserrat_32
+      size: 32
+      glyphs: "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~ àáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞß°µ€"
+
+# Configurazione principale LVGL
+lvgl:
+    displays:
+        - waveshare_display
+    touchscreens:
+        - waveshare_touch
+    log_level: DEBUG
+    color_depth: 16
+    buffer_size: 100%
+
+    on_idle:
+        timeout: 30s
+        then:
+            - logger.log: "LVGL is idle"
+
+    pages:
+        # Main page with tabview
+        - id: main_page
+          widgets:
+              - tabview:
+                    id: main_tabview
+                    position: top
+                    size: 12%
+                    tabs:
+                        # Tab 1: Piante
+                        - name: Piante
+                          id: plants_tab
+                          widgets:
+                              - obj:
+                                    id: plants_container
+                                    width: 100%
+                                    height: 100%
+                                    bg_color: 0xF5F5F5
+                                    border_width: 0
+                                    pad_all: 5
+                                    pad_top: 20
+                                    pad_left: 20
+                                    layout:
+                                        type: flex
+                                        flex_flow: row_wrap
+                                        pad_row: 10
+                                        pad_column: 10
+                                    widgets:
+                                        # Plant cards using common structure
+                                        # Plant 1 - Anthurium 1
+                                        - <<: &plant_card_base
+                                            obj:
+                                              id: plant1_card
+                                              width: 48%
+                                              height: 45%
+                                              bg_color: 0xFFFFFF
+                                              border_width: 1
+                                              border_color: 0xE0E0E0
+                                              radius: 8
+                                              pad_all: 8
+                                              layout:
+                                                  type: flex
+                                                  flex_flow: row
+                                              widgets:
+                                                  - <<: &plant_text_section
+                                                      obj:
+                                                        flex_grow: 7
+                                                        bg_color: 0xFFFFFF
+                                                        border_width: 0
+                                                        pad_all: 5
+                                                        widgets:
+                                                            - label:
+                                                                  text: "Anthurium 1"
+                                                                  text_color: 0x2E7D32
+                                                                  text_font: montserrat_16
+                                                            - label:
+                                                                  id: plant1_conductivity_label
+                                                                  text: "Conduttivita: -- uS/cm"
+                                                                  text_color: 0x424242
+                                                                  text_font: montserrat_12
+                                                                  y: 15
+                                                            - label:
+                                                                  id: plant1_light_label
+                                                                  text: "Illuminamento: -- lx"
+                                                                  text_color: 0x424242
+                                                                  text_font: montserrat_12
+                                                                  y: 30
+                                                            - label:
+                                                                  id: plant1_temperature_label
+                                                                  text: "Temperatura: -- °C"
+                                                                  text_color: 0x424242
+                                                                  text_font: montserrat_12
+                                                                  y: 45
+                                                            - label:
+                                                                  id: plant1_humidity_label
+                                                                  text: "Umidita: --%"
+                                                                  text_color: 0x424242
+                                                                  text_font: montserrat_12
+                                                                  y: 60
+                                                  - obj:
+                                                        flex_grow: 3
+                                                        bg_color: 0xE8F5E8
+                                                        border_width: 1
+                                                        border_color: 0xC8E6C9
+                                                        radius: 4
+                                                        widgets:
+                                                            - image:
+                                                                  src: anthurium_img
+                                                                  align: center
+                                                                  width: 100%
+                                                                  height: 100%
+                                                                  image_recolor_opa: 0
+                                                                  opa: 100%
+
+                                        # Plant 2 - Anthurium 2
+                                        - obj:
+                                              id: plant2_card
+                                              width: 48%
+                                              height: 45%
+                                              bg_color: 0xFFFFFF
+                                              border_width: 1
+                                              border_color: 0xE0E0E0
+                                              radius: 8
+                                              pad_all: 8
+                                              layout:
+                                                  type: flex
+                                                  flex_flow: row
+                                              widgets:
+                                                  - obj:
+                                                        flex_grow: 7
+                                                        bg_color: 0xFFFFFF
+                                                        border_width: 0
+                                                        pad_all: 5
+                                                        widgets:
+                                                            - label:
+                                                                  text: "Anthurium 2"
+                                                                  text_color: 0x2E7D32
+                                                                  text_font: montserrat_16
+                                                            - label:
+                                                                  id: plant2_conductivity_label
+                                                                  text: "Conduttivita: -- uS/cm"
+                                                                  text_color: 0x424242
+                                                                  text_font: montserrat_12
+                                                                  y: 15
+                                                            - label:
+                                                                  id: plant2_light_label
+                                                                  text: "Illuminamento: -- lx"
+                                                                  text_color: 0x424242
+                                                                  text_font: montserrat_12
+                                                                  y: 30
+                                                            - label:
+                                                                  id: plant2_temperature_label
+                                                                  text: "Temperatura: -- °C"
+                                                                  text_color: 0x424242
+                                                                  text_font: montserrat_12
+                                                                  y: 45
+                                                            - label:
+                                                                  id: plant2_humidity_label
+                                                                  text: "Umidita: --%"
+                                                                  text_color: 0x424242
+                                                                  text_font: montserrat_12
+                                                                  y: 60
+                                                  - obj:
+                                                        flex_grow: 3
+                                                        bg_color: 0xFCE4EC
+                                                        border_width: 1
+                                                        border_color: 0xF8BBD9
+                                                        radius: 4
+                                                        widgets:
+                                                            - image:
+                                                                  src: anthurium_img
+                                                                  align: center
+                                                                  width: 100%
+                                                                  height: 100%
+                                                                  image_recolor_opa: 0
+                                                                  opa: 100%
+
+                                        # Plant 3 - Alstroemeria
+                                        - obj:
+                                              id: plant3_card
+                                              width: 48%
+                                              height: 45%
+                                              bg_color: 0xFFFFFF
+                                              border_width: 1
+                                              border_color: 0xE0E0E0
+                                              radius: 8
+                                              pad_all: 8
+                                              layout:
+                                                  type: flex
+                                                  flex_flow: row
+                                              widgets:
+                                                  - obj:
+                                                        flex_grow: 7
+                                                        bg_color: 0xFFFFFF
+                                                        border_width: 0
+                                                        pad_all: 5
+                                                        widgets:
+                                                            - label:
+                                                                  text: "Alstroemeria"
+                                                                  text_color: 0x2E7D32
+                                                                  text_font: montserrat_16
+                                                            - label:
+                                                                  id: plant3_conductivity_label
+                                                                  text: "Conduttivita: -- uS/cm"
+                                                                  text_color: 0x424242
+                                                                  text_font: montserrat_12
+                                                                  y: 15
+                                                            - label:
+                                                                  id: plant3_light_label
+                                                                  text: "Illuminamento: -- lx"
+                                                                  text_color: 0x424242
+                                                                  text_font: montserrat_12
+                                                                  y: 30
+                                                            - label:
+                                                                  id: plant3_temperature_label
+                                                                  text: "Temperatura: -- °C"
+                                                                  text_color: 0x424242
+                                                                  text_font: montserrat_12
+                                                                  y: 45
+                                                            - label:
+                                                                  id: plant3_humidity_label
+                                                                  text: "Umidita: --%"
+                                                                  text_color: 0x424242
+                                                                  text_font: montserrat_12
+                                                                  y: 60
+                                                  - obj:
+                                                        flex_grow: 3
+                                                        bg_color: 0xE0F2F1
+                                                        border_width: 1
+                                                        border_color: 0xB2DFDB
+                                                        radius: 4
+                                                        widgets:
+                                                            - image:
+                                                                  src: alstroemeria_img
+                                                                  align: center
+                                                                  width: 100%
+                                                                  height: 100%
+                                                                  image_recolor_opa: 0
+                                                                  opa: 100%
+
+                                        # Plant 4 - Graptosedum
+                                        - obj:
+                                              id: plant4_card
+                                              width: 48%
+                                              height: 45%
+                                              bg_color: 0xFFFFFF
+                                              border_width: 1
+                                              border_color: 0xE0E0E0
+                                              radius: 8
+                                              pad_all: 8
+                                              layout:
+                                                  type: flex
+                                                  flex_flow: row
+                                              widgets:
+                                                  - obj:
+                                                        flex_grow: 7
+                                                        bg_color: 0xFFFFFF
+                                                        border_width: 0
+                                                        pad_all: 5
+                                                        widgets:
+                                                            - label:
+                                                                  text: "Graptosedum"
+                                                                  text_color: 0x2E7D32
+                                                                  text_font: montserrat_16
+                                                            - label:
+                                                                  id: plant4_conductivity_label
+                                                                  text: "Conduttivita: -- uS/cm"
+                                                                  text_color: 0x424242
+                                                                  text_font: montserrat_12
+                                                                  y: 15
+                                                            - label:
+                                                                  id: plant4_light_label
+                                                                  text: "Illuminamento: -- lx"
+                                                                  text_color: 0x424242
+                                                                  text_font: montserrat_12
+                                                                  y: 30
+                                                            - label:
+                                                                  id: plant4_temperature_label
+                                                                  text: "Temperatura: -- °C"
+                                                                  text_color: 0x424242
+                                                                  text_font: montserrat_12
+                                                                  y: 45
+                                                            - label:
+                                                                  id: plant4_humidity_label
+                                                                  text: "Umidita: --%"
+                                                                  text_color: 0x424242
+                                                                  text_font: montserrat_12
+                                                                  y: 60
+                                                  - obj:
+                                                        flex_grow: 3
+                                                        bg_color: 0xFFF3E0
+                                                        border_width: 1
+                                                        border_color: 0xFFCC02
+                                                        radius: 4
+                                                        widgets:
+                                                            - image:
+                                                                  src: graptosedum_img
+                                                                  align: center
+                                                                  width: 100%
+                                                                  height: 100%
+                                                                  image_recolor_opa: 0
+                                                                  opa: 100%
+
+                        # Tab 2: Condizionatori
+                        - name: Clima
+                          id: climate_tab
+                          widgets:
+                              - obj:
+                                    id: climate_container
+                                    width: 100%
+                                    height: 100%
+                                    bg_color: 0xF5F5F5
+                                    border_width: 0
+                                    pad_all: 10
+                                    layout:
+                                        type: flex
+                                        flex_flow: row_wrap
+                                        pad_row: 10
+                                        pad_column: 10
+                                    widgets:
+                                        # AC 1
+                                        - obj:
+                                              id: ac1_card
+                                              width: 48%
+                                              height: 45%
+                                              bg_color: 0xFFFFFF
+                                              border_width: 1
+                                              border_color: 0xE0E0E0
+                                              radius: 8
+                                              pad_all: 10
+                                              widgets:
+                                                  - label:
+                                                        text: "Soggiorno"
+                                                        text_color: 0x1976D2
+                                                        text_font: montserrat_16
+                                                        align: center
+                                                  - label:
+                                                        text: "Temp: 22°C"
+                                                        text_color: 0x424242
+                                                        text_font: montserrat_12
+                                                        align: center
+                                                        y: 30
+                                                  - switch:
+                                                        id: ac1_switch
+                                                        align: center
+                                                        y: 60
+
+                                        # AC 2
+                                        - obj:
+                                              id: ac2_card
+                                              width: 48%
+                                              height: 45%
+                                              bg_color: 0xFFFFFF
+                                              border_width: 1
+                                              border_color: 0xE0E0E0
+                                              radius: 8
+                                              pad_all: 10
+                                              widgets:
+                                                  - label:
+                                                        text: "Camera"
+                                                        text_color: 0x1976D2
+                                                        text_font: montserrat_16
+                                                        align: center
+                                                  - label:
+                                                        text: "Temp: 20°C"
+                                                        text_color: 0x424242
+                                                        text_font: montserrat_12
+                                                        align: center
+                                                        y: 30
+                                                  - switch:
+                                                        id: ac2_switch
+                                                        align: center
+                                                        y: 60
+
+                                        # AC 3
+                                        - obj:
+                                              id: ac3_card
+                                              width: 48%
+                                              height: 45%
+                                              bg_color: 0xFFFFFF
+                                              border_width: 1
+                                              border_color: 0xE0E0E0
+                                              radius: 8
+                                              pad_all: 10
+                                              widgets:
+                                                  - label:
+                                                        text: "Cucina"
+                                                        text_color: 0x1976D2
+                                                        text_font: montserrat_16
+                                                        align: center
+                                                  - label:
+                                                        text: "Temp: 24°C"
+                                                        text_color: 0x424242
+                                                        text_font: montserrat_12
+                                                        align: center
+                                                        y: 30
+                                                  - switch:
+                                                        id: ac3_switch
+                                                        align: center
+                                                        y: 60
+
+                                        # AC 4
+                                        - obj:
+                                              id: ac4_card
+                                              width: 48%
+                                              height: 45%
+                                              bg_color: 0xFFFFFF
+                                              border_width: 1
+                                              border_color: 0xE0E0E0
+                                              radius: 8
+                                              pad_all: 10
+                                              widgets:
+                                                  - label:
+                                                        text: "Studio"
+                                                        text_color: 0x1976D2
+                                                        text_font: montserrat_16
+                                                        align: center
+                                                  - label:
+                                                        text: "Temp: 21°C"
+                                                        text_color: 0x424242
+                                                        text_font: montserrat_12
+                                                        align: center
+                                                        y: 30
+                                                  - switch:
+                                                        id: ac4_switch
+                                                        align: center
+                                                        y: 60
+
+                        # Tab 3: Interruttori
+                        - name: Controlli
+                          id: controls_tab
+                          widgets:
+                              - obj:
+                                    id: controls_container
+                                    width: 100%
+                                    height: 100%
+                                    bg_color: 0xF5F5F5
+                                    border_width: 0
+                                    pad_all: 10
+                                    layout:
+                                        type: flex
+                                        flex_flow: row_wrap
+                                        pad_row: 10
+                                        pad_column: 10
+                                    widgets:
+                                        # Light control
+                                        - obj:
+                                              id: light_control
+                                              width: 31%
+                                              height: 45%
+                                              bg_color: 0xFFFFFF
+                                              border_width: 1
+                                              border_color: 0xE0E0E0
+                                              radius: 8
+                                              pad_all: 10
+                                              widgets:
+                                                  - label:
+                                                        text: "Luci"
+                                                        text_color: 0xFF9800
+                                                        text_font: montserrat_14
+                                                        align: center
+                                                  - switch:
+                                                        id: main_lights
+                                                        align: center
+                                                        y: 40
+
+                                        # Fan control
+                                        - obj:
+                                              id: fan_control
+                                              width: 31%
+                                              height: 45%
+                                              bg_color: 0xFFFFFF
+                                              border_width: 1
+                                              border_color: 0xE0E0E0
+                                              radius: 8
+                                              pad_all: 10
+                                              widgets:
+                                                  - label:
+                                                        text: "Ventola"
+                                                        text_color: 0x2196F3
+                                                        text_font: montserrat_14
+                                                        align: center
+                                                  - switch:
+                                                        id: fan_switch
+                                                        align: center
+                                                        y: 40
+
+                                        # Irrigation control
+                                        - obj:
+                                              id: irrigation_control
+                                              width: 31%
+                                              height: 45%
+                                              bg_color: 0xFFFFFF
+                                              border_width: 1
+                                              border_color: 0xE0E0E0
+                                              radius: 8
+                                              pad_all: 10
+                                              widgets:
+                                                  - label:
+                                                        text: "Irrigaz."
+                                                        text_color: 0x4CAF50
+                                                        text_font: montserrat_14
+                                                        align: center
+                                                  - switch:
+                                                        id: irrigation_switch
+                                                        align: center
+                                                        y: 40
+
+                                        # Security control
+                                        - obj:
+                                              id: security_control
+                                              width: 31%
+                                              height: 45%
+                                              bg_color: 0xFFFFFF
+                                              border_width: 1
+                                              border_color: 0xE0E0E0
+                                              radius: 8
+                                              pad_all: 10
+                                              widgets:
+                                                  - label:
+                                                        text: "Allarme"
+                                                        text_color: 0xF44336
+                                                        text_font: montserrat_14
+                                                        align: center
+                                                  - switch:
+                                                        id: security_switch
+                                                        align: center
+                                                        y: 40
+
+                                        # Music control
+                                        - obj:
+                                              id: music_control
+                                              width: 31%
+                                              height: 45%
+                                              bg_color: 0xFFFFFF
+                                              border_width: 1
+                                              border_color: 0xE0E0E0
+                                              radius: 8
+                                              pad_all: 10
+                                              widgets:
+                                                  - label:
+                                                        text: "Musica"
+                                                        text_color: 0x9C27B0
+                                                        text_font: montserrat_14
+                                                        align: center
+                                                  - switch:
+                                                        id: music_switch
+                                                        align: center
+                                                        y: 40
+
+                                        # Garage control
+                                        - obj:
+                                              id: garage_control
+                                              width: 31%
+                                              height: 45%
+                                              bg_color: 0xFFFFFF
+                                              border_width: 1
+                                              border_color: 0xE0E0E0
+                                              radius: 8
+                                              pad_all: 10
+                                              widgets:
+                                                  - label:
+                                                        text: "Garage"
+                                                        text_color: 0x607D8B
+                                                        text_font: montserrat_14
+                                                        align: center
+                                                  - button:
+                                                        id: garage_button
+                                                        width: 80
+                                                        height: 30
+                                                        align: center
+                                                        y: 40
+                                                        widgets:
+                                                            - label:
+                                                                  text: "Apri"
+                                                                  align: center
+
+                        # Tab 4: Meteo
+                        - name: Meteo
+                          id: weather_tab
+                          widgets:
+                              - obj:
+                                    id: weather_container
+                                    width: 100%
+                                    height: 100%
+                                    bg_color: 0xF5F5F5
+                                    border_width: 0
+                                    pad_all: 10
+                                    widgets:
+                                        # Current weather
+                                        - obj:
+                                              id: current_weather
+                                              width: 100%
+                                              height: 50%
+                                              bg_color: 0xFFFFFF
+                                              border_width: 1
+                                              border_color: 0xE0E0E0
+                                              radius: 8
+                                              pad_all: 15
+                                              widgets:
+                                                  - label:
+                                                        text: "Oggi"
+                                                        text_color: 0x1976D2
+                                                        text_font: montserrat_20
+                                                        align: center
+                                                  - label:
+                                                        text: "Soleggiato"
+                                                        text_color: 0x424242
+                                                        text_font: montserrat_16
+                                                        align: center
+                                                        y: 40
+                                                  - label:
+                                                        text: "23°C"
+                                                        text_color: 0xFF9800
+                                                        text_font: montserrat_32
+                                                        align: center
+                                                        y: 80
+                                                  - label:
+                                                        text: "Umidità: 65% | Vento: 12 km/h"
+                                                        text_color: 0x424242
+                                                        text_font: montserrat_12
+                                                        align: center
+                                                        y: 140
+
+                                        # Weather forecast
+                                        - obj:
+                                              id: weather_forecast
+                                              width: 100%
+                                              height: 50%
+                                              y: 50%
+                                              bg_color: 0xFFFFFF
+                                              border_width: 1
+                                              border_color: 0xE0E0E0
+                                              radius: 8
+                                              pad_all: 10
+                                              layout:
+                                                  type: flex
+                                                  flex_flow: row
+                                                  pad_column: 10
+                                              widgets:
+                                                  # Tomorrow
+                                                  - obj:
+                                                        flex_grow: 1
+                                                        bg_color: 0xF8F9FA
+                                                        border_width: 1
+                                                        border_color: 0xE9ECEF
+                                                        radius: 6
+                                                        pad_all: 8
+                                                        widgets:
+                                                            - label:
+                                                                  text: "Dom"
+                                                                  text_color: 0x424242
+                                                                  text_font: montserrat_12
+                                                                  align: center
+                                                            - label:
+                                                                  text: "Nuvoloso"
+                                                                  text_color: 0x757575
+                                                                  text_font: montserrat_10
+                                                                  align: center
+                                                                  y: 25
+                                                            - label:
+                                                                  text: "20°C"
+                                                                  text_color: 0x1976D2
+                                                                  text_font: montserrat_16
+                                                                  align: center
+                                                                  y: 50
+
+                                                  # Day after tomorrow
+                                                  - obj:
+                                                        flex_grow: 1
+                                                        bg_color: 0xF8F9FA
+                                                        border_width: 1
+                                                        border_color: 0xE9ECEF
+                                                        radius: 6
+                                                        pad_all: 8
+                                                        widgets:
+                                                            - label:
+                                                                  text: "Lun"
+                                                                  text_color: 0x424242
+                                                                  text_font: montserrat_12
+                                                                  align: center
+                                                            - label:
+                                                                  text: "Pioggia"
+                                                                  text_color: 0x757575
+                                                                  text_font: montserrat_10
+                                                                  align: center
+                                                                  y: 25
+                                                            - label:
+                                                                  text: "18°C"
+                                                                  text_color: 0x1976D2
+                                                                  text_font: montserrat_16
+                                                                  align: center
+                                                                  y: 50
+
+                                                  # Third day
+                                                  - obj:
+                                                        flex_grow: 1
+                                                        bg_color: 0xF8F9FA
+                                                        border_width: 1
+                                                        border_color: 0xE9ECEF
+                                                        radius: 6
+                                                        pad_all: 8
+                                                        widgets:
+                                                            - label:
+                                                                  text: "Mar"
+                                                                  text_color: 0x424242
+                                                                  text_font: montserrat_12
+                                                                  align: center
+                                                            - label:
+                                                                  text: "Sole"
+                                                                  text_color: 0x757575
+                                                                  text_font: montserrat_10
+                                                                  align: center
+                                                                  y: 25
+                                                            - label:
+                                                                  text: "25°C"
+                                                                  text_color: 0x1976D2
+                                                                  text_font: montserrat_16
+                                                                  align: center
+                                                                  y: 50
