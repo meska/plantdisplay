@@ -45,11 +45,17 @@ Ogni pianta ha un indicatore colorato:
 - **Graptosedum**: Arancione (0xFFF3E0)
 
 #### 2. **Controllo Climatizzazione** (Tab "Clima")
-Gestione 4 condizionatori per diverse stanze:
-- Soggiorno (22°C)
-- Camera (20°C)
-- Cucina (24°C)
-- Studio (21°C)
+Gestione 3 condizionatori collegati a Home Assistant:
+- **Soggiorno** (`climate.soggiorno`): Controllo completo con temperatura attuale e target
+- **Camera** (`climate.camera`): Controllo completo con temperatura attuale e target  
+- **Chris** (`climate.chris`): Controllo completo con temperatura attuale e target
+
+**Funzionalità per ogni climatizzatore**:
+- Switch On/Off per accensione/spegnimento
+- Visualizzazione temperatura attuale della stanza
+- Visualizzazione temperatura target impostata
+- Pulsanti +/- per regolare la temperatura target
+- Controllo tramite servizi Home Assistant (`climate.turn_on`, `climate.turn_off`, `climate.set_temperature`)
 
 #### 3. **Controlli Generali** (Tab "Controlli")
 - **Luci**: Controllo illuminazione generale

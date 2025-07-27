@@ -94,68 +94,68 @@ lvgl:
                                         # Plant cards using common structure
                                         # Plant 1 - Anthurium 1
                                         - <<: &plant_card_base
-                                            obj:
-                                              id: plant1_card
-                                              width: 48%
-                                              height: 45%
-                                              bg_color: 0xFFFFFF
-                                              border_width: 1
-                                              border_color: 0xE0E0E0
-                                              radius: 8
-                                              pad_all: 8
-                                              layout:
-                                                  type: flex
-                                                  flex_flow: row
-                                              widgets:
-                                                  - <<: &plant_text_section
-                                                      obj:
-                                                        flex_grow: 7
-                                                        bg_color: 0xFFFFFF
-                                                        border_width: 0
-                                                        pad_all: 5
-                                                        widgets:
-                                                            - label:
-                                                                  text: "Anthurium 1"
-                                                                  text_color: 0x2E7D32
-                                                                  text_font: montserrat_16
-                                                            - label:
-                                                                  id: plant1_conductivity_label
-                                                                  text: "Conduttivita: -- uS/cm"
-                                                                  text_color: 0x424242
-                                                                  text_font: montserrat_12
-                                                                  y: 15
-                                                            - label:
-                                                                  id: plant1_light_label
-                                                                  text: "Illuminamento: -- lx"
-                                                                  text_color: 0x424242
-                                                                  text_font: montserrat_12
-                                                                  y: 30
-                                                            - label:
-                                                                  id: plant1_temperature_label
-                                                                  text: "Temperatura: -- °C"
-                                                                  text_color: 0x424242
-                                                                  text_font: montserrat_12
-                                                                  y: 45
-                                                            - label:
-                                                                  id: plant1_humidity_label
-                                                                  text: "Umidita: --%"
-                                                                  text_color: 0x424242
-                                                                  text_font: montserrat_12
-                                                                  y: 60
-                                                  - obj:
-                                                        flex_grow: 3
-                                                        bg_color: 0xE8F5E8
-                                                        border_width: 1
-                                                        border_color: 0xC8E6C9
-                                                        radius: 4
-                                                        widgets:
-                                                            - image:
-                                                                  src: anthurium_img
-                                                                  align: center
-                                                                  width: 100%
-                                                                  height: 100%
-                                                                  image_recolor_opa: 0
-                                                                  opa: 100%
+                                              obj:
+                                                  id: plant1_card
+                                                  width: 50%
+                                                  height: 50%
+                                                  bg_color: 0xFFFFFF
+                                                  border_width: 1
+                                                  border_color: 0xE0E0E0
+                                                  radius: 8
+                                                  pad_all: 8
+                                                  layout:
+                                                      type: flex
+                                                      flex_flow: row
+                                                  widgets:
+                                                      - <<: &plant_text_section
+                                                            obj:
+                                                                flex_grow: 7
+                                                                bg_color: 0xFFFFFF
+                                                                border_width: 0
+                                                                pad_all: 5
+                                                                widgets:
+                                                                    - label:
+                                                                          text: "Anthurium 1"
+                                                                          text_color: 0x2E7D32
+                                                                          text_font: montserrat_16
+                                                                    - label:
+                                                                          id: plant1_conductivity_label
+                                                                          text: "Conduttivita: -- uS/cm"
+                                                                          text_color: 0x424242
+                                                                          text_font: montserrat_12
+                                                                          y: 17
+                                                                    - label:
+                                                                          id: plant1_light_label
+                                                                          text: "Illuminamento: -- lx"
+                                                                          text_color: 0x424242
+                                                                          text_font: montserrat_12
+                                                                          y: 30
+                                                                    - label:
+                                                                          id: plant1_temperature_label
+                                                                          text: "Temperatura: -- °C"
+                                                                          text_color: 0x424242
+                                                                          text_font: montserrat_12
+                                                                          y: 45
+                                                                    - label:
+                                                                          id: plant1_humidity_label
+                                                                          text: "Umidita: --%"
+                                                                          text_color: 0x424242
+                                                                          text_font: montserrat_12
+                                                                          y: 60
+                                                      - obj:
+                                                            flex_grow: 3
+                                                            bg_color: 0xE8F5E8
+                                                            border_width: 1
+                                                            border_color: 0xC8E6C9
+                                                            radius: 4
+                                                            widgets:
+                                                                - image:
+                                                                      src: anthurium_img
+                                                                      align: center
+                                                                      width: 100%
+                                                                      height: 100%
+                                                                      image_recolor_opa: 0
+                                                                      opa: 100%
 
                                         # Plant 2 - Anthurium 2
                                         - obj:
@@ -363,7 +363,7 @@ lvgl:
                                         pad_row: 10
                                         pad_column: 10
                                     widgets:
-                                        # AC 1
+                                        # AC 1 - Soggiorno
                                         - obj:
                                               id: ac1_card
                                               width: 48%
@@ -372,7 +372,7 @@ lvgl:
                                               border_width: 1
                                               border_color: 0xE0E0E0
                                               radius: 8
-                                              pad_all: 10
+                                              pad_all: 8
                                               widgets:
                                                   - label:
                                                         text: "Soggiorno"
@@ -380,17 +380,75 @@ lvgl:
                                                         text_font: montserrat_16
                                                         align: center
                                                   - label:
-                                                        text: "Temp: 22°C"
+                                                        id: ac1_temp_label
+                                                        text: "Attuale: --°C"
                                                         text_color: 0x424242
                                                         text_font: montserrat_12
                                                         align: center
-                                                        y: 30
-                                                  - switch:
-                                                        id: ac1_switch
+                                                        y: 25
+                                                  - label:
+                                                        id: ac1_target_label
+                                                        text: "Target: --°C"
+                                                        text_color: 0x666666
+                                                        text_font: montserrat_10
                                                         align: center
-                                                        y: 60
+                                                        y: 40
+                                                  - obj:
+                                                        id: ac1_controls
+                                                        width: 100%
+                                                        height: 40
+                                                        y: 55
+                                                        bg_color: 0xFFFFFF
+                                                        border_width: 0
+                                                        layout:
+                                                            type: flex
+                                                            flex_flow: row
+                                                            flex_align_main: space_around
+                                                        widgets:
+                                                            - switch:
+                                                                  id: ac1_switch
+                                                                  on_value:
+                                                                      then:
+                                                                          - homeassistant.service:
+                                                                                service: climate.set_hvac_mode
+                                                                                data:
+                                                                                    entity_id: climate.soggiorno
+                                                                                    hvac_mode: !lambda |
+                                                                                        return x ? "cool" : "off";
+                                                            - button:
+                                                                  id: ac1_temp_down
+                                                                  width: 30
+                                                                  height: 30
+                                                                  widgets:
+                                                                      - label:
+                                                                            text: "-"
+                                                                            text_font: montserrat_16
+                                                                            align: center
+                                                                  on_click:
+                                                                      then:
+                                                                          - homeassistant.service:
+                                                                                service: climate.set_temperature
+                                                                                data:
+                                                                                    entity_id: climate.soggiorno
+                                                                                    temperature: "22"
+                                                            - button:
+                                                                  id: ac1_temp_up
+                                                                  width: 30
+                                                                  height: 30
+                                                                  widgets:
+                                                                      - label:
+                                                                            text: "+"
+                                                                            text_font: montserrat_16
+                                                                            align: center
+                                                                  on_click:
+                                                                      then:
+                                                                          - homeassistant.service:
+                                                                                service: climate.set_temperature
+                                                                                data:
+                                                                                    entity_id: climate.soggiorno
+                                                                                    temperature: "24"
 
-                                        # AC 2
+                                        # AC 2 - Camera
                                         - obj:
                                               id: ac2_card
                                               width: 48%
@@ -399,7 +457,7 @@ lvgl:
                                               border_width: 1
                                               border_color: 0xE0E0E0
                                               radius: 8
-                                              pad_all: 10
+                                              pad_all: 8
                                               widgets:
                                                   - label:
                                                         text: "Camera"
@@ -407,17 +465,75 @@ lvgl:
                                                         text_font: montserrat_16
                                                         align: center
                                                   - label:
-                                                        text: "Temp: 20°C"
+                                                        id: ac2_temp_label
+                                                        text: "Attuale: --°C"
                                                         text_color: 0x424242
                                                         text_font: montserrat_12
                                                         align: center
-                                                        y: 30
-                                                  - switch:
-                                                        id: ac2_switch
+                                                        y: 25
+                                                  - label:
+                                                        id: ac2_target_label
+                                                        text: "Target: --°C"
+                                                        text_color: 0x666666
+                                                        text_font: montserrat_10
                                                         align: center
-                                                        y: 60
+                                                        y: 40
+                                                  - obj:
+                                                        id: ac2_controls
+                                                        width: 100%
+                                                        height: 40
+                                                        y: 55
+                                                        bg_color: 0xFFFFFF
+                                                        border_width: 0
+                                                        layout:
+                                                            type: flex
+                                                            flex_flow: row
+                                                            flex_align_main: space_around
+                                                        widgets:
+                                                            - switch:
+                                                                  id: ac2_switch
+                                                                  on_value:
+                                                                      then:
+                                                                          - homeassistant.service:
+                                                                                service: climate.set_hvac_mode
+                                                                                data:
+                                                                                    entity_id: climate.camera
+                                                                                    hvac_mode: !lambda |
+                                                                                        return x ? "cool" : "off";
+                                                            - button:
+                                                                  id: ac2_temp_down
+                                                                  width: 30
+                                                                  height: 30
+                                                                  widgets:
+                                                                      - label:
+                                                                            text: "-"
+                                                                            text_font: montserrat_16
+                                                                            align: center
+                                                                  on_click:
+                                                                      then:
+                                                                          - homeassistant.service:
+                                                                                service: climate.set_temperature
+                                                                                data:
+                                                                                    entity_id: climate.camera
+                                                                                    temperature: "22"
+                                                            - button:
+                                                                  id: ac2_temp_up
+                                                                  width: 30
+                                                                  height: 30
+                                                                  widgets:
+                                                                      - label:
+                                                                            text: "+"
+                                                                            text_font: montserrat_16
+                                                                            align: center
+                                                                  on_click:
+                                                                      then:
+                                                                          - homeassistant.service:
+                                                                                service: climate.set_temperature
+                                                                                data:
+                                                                                    entity_id: climate.camera
+                                                                                    temperature: "24"
 
-                                        # AC 3
+                                        # AC 3 - Chris (era Cucina)
                                         - obj:
                                               id: ac3_card
                                               width: 48%
@@ -426,50 +542,81 @@ lvgl:
                                               border_width: 1
                                               border_color: 0xE0E0E0
                                               radius: 8
-                                              pad_all: 10
+                                              pad_all: 8
                                               widgets:
                                                   - label:
-                                                        text: "Cucina"
+                                                        text: "Chris"
                                                         text_color: 0x1976D2
                                                         text_font: montserrat_16
                                                         align: center
                                                   - label:
-                                                        text: "Temp: 24°C"
+                                                        id: ac3_temp_label
+                                                        text: "Attuale: --°C"
                                                         text_color: 0x424242
                                                         text_font: montserrat_12
                                                         align: center
-                                                        y: 30
-                                                  - switch:
-                                                        id: ac3_switch
-                                                        align: center
-                                                        y: 60
-
-                                        # AC 4
-                                        - obj:
-                                              id: ac4_card
-                                              width: 48%
-                                              height: 45%
-                                              bg_color: 0xFFFFFF
-                                              border_width: 1
-                                              border_color: 0xE0E0E0
-                                              radius: 8
-                                              pad_all: 10
-                                              widgets:
+                                                        y: 25
                                                   - label:
-                                                        text: "Studio"
-                                                        text_color: 0x1976D2
-                                                        text_font: montserrat_16
+                                                        id: ac3_target_label
+                                                        text: "Target: --°C"
+                                                        text_color: 0x666666
+                                                        text_font: montserrat_10
                                                         align: center
-                                                  - label:
-                                                        text: "Temp: 21°C"
-                                                        text_color: 0x424242
-                                                        text_font: montserrat_12
-                                                        align: center
-                                                        y: 30
-                                                  - switch:
-                                                        id: ac4_switch
-                                                        align: center
-                                                        y: 60
+                                                        y: 40
+                                                  - obj:
+                                                        id: ac3_controls
+                                                        width: 100%
+                                                        height: 40
+                                                        y: 55
+                                                        bg_color: 0xFFFFFF
+                                                        border_width: 0
+                                                        layout:
+                                                            type: flex
+                                                            flex_flow: row
+                                                            flex_align_main: space_around
+                                                        widgets:
+                                                            - switch:
+                                                                  id: ac3_switch
+                                                                  on_value:
+                                                                      then:
+                                                                          - homeassistant.service:
+                                                                                service: climate.set_hvac_mode
+                                                                                data:
+                                                                                    entity_id: climate.chris
+                                                                                    hvac_mode: !lambda |
+                                                                                        return x ? "cool" : "off";
+                                                            - button:
+                                                                  id: ac3_temp_down
+                                                                  width: 30
+                                                                  height: 30
+                                                                  widgets:
+                                                                      - label:
+                                                                            text: "-"
+                                                                            text_font: montserrat_16
+                                                                            align: center
+                                                                  on_click:
+                                                                      then:
+                                                                          - homeassistant.service:
+                                                                                service: climate.set_temperature
+                                                                                data:
+                                                                                    entity_id: climate.chris
+                                                                                    temperature: "22"
+                                                            - button:
+                                                                  id: ac3_temp_up
+                                                                  width: 30
+                                                                  height: 30
+                                                                  widgets:
+                                                                      - label:
+                                                                            text: "+"
+                                                                            text_font: montserrat_16
+                                                                            align: center
+                                                                  on_click:
+                                                                      then:
+                                                                          - homeassistant.service:
+                                                                                service: climate.set_temperature
+                                                                                data:
+                                                                                    entity_id: climate.chris
+                                                                                    temperature: "24"
 
                         # Tab 3: Interruttori
                         - name: Controlli

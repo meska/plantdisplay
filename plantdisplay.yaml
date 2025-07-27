@@ -611,4 +611,47 @@ sensor:
             text: !lambda |
               return ("Umidita: " + to_string((int)x) + "%").c_str();
 
+# Sensori per climatizzatori - utilizziamo text_sensor per lo stato completo
+text_sensor:
+  - platform: homeassistant
+    name: "Soggiorno Climate State"
+    id: soggiorno_climate
+    entity_id: climate.soggiorno
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: ac1_temp_label
+            text: "Stato: CONNESSO"
+        - lvgl.label.update:
+            id: ac1_target_label
+            text: "Ready"
+            
+  - platform: homeassistant
+    name: "Camera Climate State"
+    id: camera_climate
+    entity_id: climate.camera
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: ac2_temp_label
+            text: "Stato: CONNESSO"
+        - lvgl.label.update:
+            id: ac2_target_label
+            text: "Ready"
+            
+  - platform: homeassistant
+    name: "Chris Climate State"
+    id: chris_climate
+    entity_id: climate.chris
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: ac3_temp_label
+            text: "Stato: CONNESSO"
+        - lvgl.label.update:
+            id: ac3_target_label
+            text: "Ready"
+
+
+
 # LVGL configuration included from lvgl_config.yaml
