@@ -60,6 +60,10 @@ font:
           - "\U000F0737" # mdi-arrow-up-bold
           - "\U000F072E" # mdi-arrow-down-bold
           - "\U000F0E1E" # mdi-check-bold
+          - "\U000F0E66" # mdi-sprout
+          - "\U000F050E" # mdi-theme-light-dark
+          - "\U000F050F" # mdi-thermometer
+          - "\U000F058E" # mdi-water-percent
 
 # Configurazione principale LVGL
 lvgl:

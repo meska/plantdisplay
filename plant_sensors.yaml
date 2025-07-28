@@ -42,6 +42,9 @@ sensor:
                         float min_conductivity = ${conductivity[0]};
                         float max_conductivity = ${conductivity[1]};
                         return (x >= min_conductivity && x <= max_conductivity);
+              - sensor.template.publish:
+                    id: ${prefix}_all_in_range
+                    state: !lambda "return id(${prefix}_all_in_range).state;"
 
     - platform: homeassistant
       name: "Umidità"
@@ -86,6 +89,9 @@ sensor:
                         float min_humidity = ${humidity[0]};
                         float max_humidity = ${humidity[1]};
                         return (x >= min_humidity && x <= max_humidity);
+              - sensor.template.publish:
+                    id: ${prefix}_all_in_range
+                    state: !lambda "return id(${prefix}_all_in_range).state;"
 
     - platform: homeassistant
       name: "Luce"
@@ -130,6 +136,9 @@ sensor:
                         float min_light = ${light[0]};
                         float max_light = ${light[1]};
                         return (x >= min_light && x <= max_light);
+              - sensor.template.publish:
+                    id: ${prefix}_all_in_range
+                    state: !lambda "return id(${prefix}_all_in_range).state;"
 
     - platform: homeassistant
       name: "Temperatura"
@@ -176,6 +185,9 @@ sensor:
                         float min_temperature = ${temperature[0]};
                         float max_temperature = ${temperature[1]};
                         return (x >= min_temperature && x <= max_temperature);
+              - sensor.template.publish:
+                    id: ${prefix}_all_in_range
+                    state: !lambda "return id(${prefix}_all_in_range).state;"
 
     - platform: template
       name: "${prefix} status"
@@ -220,7 +232,6 @@ sensor:
 
           // Ritorna 1 se tutti sono nel range, 0 se fuori range
           return (conductivity_ok && humidity_ok && light_ok && temperature_ok) ? 1.0 : 0.0;
-      update_interval: 30s
       on_value:
           then:
               - logger.log:

@@ -25,11 +25,13 @@ obj:
               scrollbar_mode: "OFF"
               layout:
                   type: GRID
-                  grid_columns: [FR(10), FR(1)]
-                  grid_rows: [FR(1), FR(1), FR(1), FR(1), FR(1)]
+                  grid_columns: [FR(1), FR(10), FR(1)]
+                  grid_rows: [FR(3), FR(2), FR(2), FR(2), FR(2)]
               widgets:
                   - label:
                         grid_cell_row_pos: 0
+                        grid_cell_column_pos: 0
+                        grid_cell_column_span: 3
                         grid_cell_x_align: STRETCH
                         grid_cell_y_align: STRETCH
                         text: $name
@@ -37,12 +39,14 @@ obj:
                         text_font: montserrat_16
                   - label:
                         grid_cell_row_pos: 1
+                        grid_cell_column_pos: 1
                         id: ${plant_prefix}_conductivity_label
                         text: "Fertilita: -- uS/cm"
                         text_color: 0x424242
                         text_font: montserrat_12
                   - label:
                         grid_cell_row_pos: 2
+                        grid_cell_column_pos: 1
                         id: ${plant_prefix}_humidity_label
                         text: "Umidita: --%"
                         text_color: 0x424242
@@ -50,19 +54,51 @@ obj:
 
                   - label:
                         grid_cell_row_pos: 3
+                        grid_cell_column_pos: 1
                         id: ${plant_prefix}_temperature_label
                         text: "Temperatura: -- °C"
                         text_color: 0x424242
                         text_font: montserrat_12
                   - label:
                         grid_cell_row_pos: 4
+                        grid_cell_column_pos: 1
                         id: ${plant_prefix}_light_label
                         text: "Luce: -- lx"
                         text_color: 0x424242
                         text_font: montserrat_12
+
                   - label:
                         grid_cell_row_pos: 1
-                        grid_cell_column_pos: 1
+                        grid_cell_column_pos: 0
+                        id: ${plant_prefix}_conductivity_icon
+                        text: "\U000F0E66"
+                        text_color: 0x424242
+                        text_font: material_icons_16
+                  - label:
+                        grid_cell_row_pos: 2
+                        grid_cell_column_pos: 0
+                        id: ${plant_prefix}_humidity_icon
+                        text: "\U000F058E"
+                        text_color: 0x424242
+                        text_font: material_icons_16
+                  - label:
+                        grid_cell_row_pos: 3
+                        grid_cell_column_pos: 0
+                        id: ${plant_prefix}_temperature_icon
+                        text: "\U000F050F"
+                        text_color: 0x424242
+                        text_font: material_icons_16
+                  - label:
+                        grid_cell_row_pos: 4
+                        grid_cell_column_pos: 0
+                        id: ${plant_prefix}_light_icon
+                        text: "\U000F050E"
+                        text_color: 0x424242
+                        text_font: material_icons_16
+
+                  - label:
+                        grid_cell_row_pos: 1
+                        grid_cell_column_pos: 2
                         id: ${plant_prefix}_conductivity_arrow
                         text: ""
                         hidden: true
@@ -70,7 +106,7 @@ obj:
                         text_font: material_icons_16
                   - label:
                         grid_cell_row_pos: 2
-                        grid_cell_column_pos: 1
+                        grid_cell_column_pos: 2
                         id: ${plant_prefix}_humidity_arrow
                         hidden: true
                         text: ""
@@ -78,7 +114,7 @@ obj:
                         text_font: material_icons_16
                   - label:
                         grid_cell_row_pos: 3
-                        grid_cell_column_pos: 1
+                        grid_cell_column_pos: 2
                         id: ${plant_prefix}_temperature_arrow
                         text: ""
                         hidden: true
@@ -86,7 +122,7 @@ obj:
                         text_font: material_icons_16
                   - label:
                         grid_cell_row_pos: 4
-                        grid_cell_column_pos: 1
+                        grid_cell_column_pos: 2
                         id: ${plant_prefix}_light_arrow
                         text: ""
                         hidden: true
