@@ -1,77 +1,91 @@
 # PlantDisplay - Progetto ESPHome
 
 ## Panoramica del Progetto
+
 **PlantDisplay** è un sistema di monitoraggio e controllo smart bassu su ESP32-S3 con display touchscreen da 800x480 pixel. Il dispositivo integra funzionalità di monitoraggio piante, controllo climatizzazione, gestione luci e automazioni domestiche.
 
 ## Hardware Utilizzato
-- **Microcontrollore**: ESP32-S3 DevKit-C-1
-- **Display**: Waveshare RGB Display 800x480 con interfaccia RPI DPI
-- **Touchscreen**: GT911 capacitivo
-- **Memoria**: 8MB Flash + PSRAM OCTAL (64KB cache)
-- **I/O Expander**: CH422G per controllo GPIO aggiuntivi
-- **Connettività**: WiFi + Bluetooth (proxy BLE attivo)
+
+-   **Microcontrollore**: ESP32-S3 DevKit-C-1
+-   **Display**: Waveshare RGB Display 800x480 con interfaccia RPI DPI
+-   **Touchscreen**: GT911 capacitivo
+-   **Memoria**: 8MB Flash + PSRAM OCTAL (64KB cache)
+-   **I/O Expander**: CH422G per controllo GPIO aggiuntivi
+-   **Connettività**: WiFi + Bluetooth (proxy BLE attivo)
 
 ## Architettura Software
 
 ### Framework e Configurazione
-- **ESPHome**: v2025.4.2+ (versione minima richiesta)
-- **Framework ESP-IDF**: con ottimizzazioni avanzate
-- **LVGL**: Interfaccia grafica con buffer al 100%
-- **Home Assistant**: Integrazione completa via API
+
+-   **ESPHome**: v2025.4.2+ (versione minima richiesta)
+-   **Framework ESP-IDF**: con ottimizzazioni avanzate
+-   **LVGL**: Interfaccia grafica con buffer al 100%
+-   **Home Assistant**: Integrazione completa via API
 
 ### Funzionalità Principali
 
 #### 1. **Monitoraggio Piante** (Tab "Piante")
+
 Visualizza 4 piante con i seguenti parametri:
-- **Conduttività del suolo** (uS/cm)
-- **Illuminamento** (lx)
-- **Temperatura** (°C)
-- **Umidità relativa** (%)
+
+-   **Conduttività del suolo** (uS/cm)
+-   **Luce** (lx)
+-   **Temperatura** (°C)
+-   **Umidità relativa** (%)
 
 **Range Ottimali per Tipo di Pianta**:
-- **Anthurium 1 & 2**: 350-800 uS/cm (piante tropicali)
-- **Alstroemeria**: 300-700 uS/cm (piante bulbose)
-- **Graptosedum**: 150-400 uS/cm (piante succulente)
+
+-   **Anthurium 1 & 2**: 350-800 uS/cm (piante tropicali)
+-   **Alstroemeria**: 300-700 uS/cm (piante bulbose)
+-   **Graptosedum**: 150-400 uS/cm (piante succulente)
 
 **Indicatori Visivi**:
-- **Bordi delle carte**: Grigi (normale) / Rossi (valori fuori range)
-- **Testo conduttività**: Grigio scuro (normale) / Rosso (fuori range)
-- **Aggiornamento**: Dati in tempo reale da Home Assistant
+
+-   **Bordi delle carte**: Grigi (normale) / Rossi (valori fuori range)
+-   **Testo conduttività**: Grigio scuro (normale) / Rosso (fuori range)
+-   **Aggiornamento**: Dati in tempo reale da Home Assistant
 
 Ogni pianta ha un indicatore colorato:
-- **Anthurium 1**: Verde (0x2E7D32) 
-- **Anthurium 2**: Rosa/Viola (0xFCE4EC)
-- **Alstroemeria**: Teal (0xE0F2F1)
-- **Graptosedum**: Arancione (0xFFF3E0)
+
+-   **Anthurium 1**: Verde (0x2E7D32)
+-   **Anthurium 2**: Rosa/Viola (0xFCE4EC)
+-   **Alstroemeria**: Teal (0xE0F2F1)
+-   **Graptosedum**: Arancione (0xFFF3E0)
 
 #### 2. **Controllo Climatizzazione** (Tab "Clima")
+
 Gestione 3 condizionatori collegati a Home Assistant:
-- **Soggiorno** (`climate.soggiorno`): Controllo completo con temperatura attuale e target
-- **Camera** (`climate.camera`): Controllo completo con temperatura attuale e target  
-- **Chris** (`climate.chris`): Controllo completo con temperatura attuale e target
+
+-   **Soggiorno** (`climate.soggiorno`): Controllo completo con temperatura attuale e target
+-   **Camera** (`climate.camera`): Controllo completo con temperatura attuale e target
+-   **Chris** (`climate.chris`): Controllo completo con temperatura attuale e target
 
 **Funzionalità per ogni climatizzatore**:
-- Switch On/Off per accensione/spegnimento
-- Visualizzazione temperatura attuale della stanza
-- Visualizzazione temperatura target impostata
-- Pulsanti +/- per regolare la temperatura target
-- Controllo tramite servizi Home Assistant (`climate.turn_on`, `climate.turn_off`, `climate.set_temperature`)
+
+-   Switch On/Off per accensione/spegnimento
+-   Visualizzazione temperatura attuale della stanza
+-   Visualizzazione temperatura target impostata
+-   Pulsanti +/- per regolare la temperatura target
+-   Controllo tramite servizi Home Assistant (`climate.turn_on`, `climate.turn_off`, `climate.set_temperature`)
 
 #### 3. **Controlli Generali** (Tab "Controlli")
-- **Luci**: Controllo illuminazione generale
-- **Ventola**: Gestione ventilazione
-- **Irrigazione**: Sistema di irrigazione automatico
-- **Allarme**: Sistema di sicurezza
-- **Musica**: Controllo audio
-- **Garage**: Apertura/chiusura garage
+
+-   **Luci**: Controllo illuminazione generale
+-   **Ventola**: Gestione ventilazione
+-   **Irrigazione**: Sistema di irrigazione automatico
+-   **Allarme**: Sistema di sicurezza
+-   **Musica**: Controllo audio
+-   **Garage**: Apertura/chiusura garage
 
 #### 4. **Meteo** (Tab "Meteo")
-- **Condizioni attuali**: Temperatura, condizioni, umidità, vento
-- **Previsioni**: 3 giorni (Domenica, Lunedì, Martedì)
+
+-   **Condizioni attuali**: Temperatura, condizioni, umidità, vento
+-   **Previsioni**: 3 giorni (Domenica, Lunedì, Martedì)
 
 ### Caratteristiche Tecniche Avanzate
 
 #### Display e Touchscreen
+
 ```yaml
 Display: RPI DPI RGB - 800x480
 Frequenza PCLK: 16MHz
@@ -80,15 +94,17 @@ Backlight: Controllato via CH422G
 ```
 
 #### Sistema Anti-Burn
-- **Attivazione automatica**: 5 minuti dopo spegnimento backlight
-- **Schedulazione**: Attivo dalle 2:00 alle 5:35 (ogni ora: 5-35 minuti)
-- **Modalità**: "Snow effect" per prevenire burn-in
+
+-   **Attivazione automatica**: 5 minuti dopo spegnimento backlight
+-   **Schedulazione**: Attivo dalle 2:00 alle 5:35 (ogni ora: 5-35 minuti)
+-   **Modalità**: "Snow effect" per prevenire burn-in
 
 #### Ottimizzazioni Prestazioni
-- **PSRAM OCTAL**: 80MHz per prestazioni elevate
-- **CPU**: 240MHz con cache ottimizzata
-- **Memoria**: 64KB data cache + 524KB RAM massima
-- **Flash**: QIO mode a 80MHz
+
+-   **PSRAM OCTAL**: 80MHz per prestazioni elevate
+-   **CPU**: 240MHz con cache ottimizzata
+-   **Memoria**: 64KB data cache + 524KB RAM massima
+-   **Flash**: QIO mode a 80MHz
 
 ## Struttura File del Progetto
 
@@ -110,14 +126,16 @@ plantdisplay/
 ```
 
 ## Configurazione Rete
-- **SSID**: "Marco&Krasi&Chris"
-- **Crittografia API**: Configurata per Home Assistant
-- **OTA**: Aggiornamenti Over-The-Air abilitati
-- **Bluetooth Proxy**: Attivo per dispositivi BLE
+
+-   **SSID**: "Marco&Krasi&Chris"
+-   **Crittografia API**: Configurata per Home Assistant
+-   **OTA**: Aggiornamenti Over-The-Air abilitati
+-   **Bluetooth Proxy**: Attivo per dispositivi BLE
 
 ## Pin Assignment ESP32-S3
 
 ### Display RGB
+
 ```
 PCLK: GPIO7
 DE: GPIO5
@@ -127,11 +145,12 @@ Reset: CH422G Pin 3
 
 Dati RGB:
 - Rosso: GPIO1,2,42,41,40
-- Verde: GPIO39,0,45,48,47,21  
+- Verde: GPIO39,0,45,48,47,21
 - Blu: GPIO14,38,18,17,10
 ```
 
 ### I2C e Controlli
+
 ```
 I2C: SDA=GPIO8, SCL=GPIO9
 Touchscreen INT: GPIO4
@@ -142,29 +161,34 @@ Backlight: CH422G Pin 2
 ## Automazioni Integrate
 
 ### Gestione Energia
-- **Antiburn automatico**: Previene danneggiamento display
-- **Schedulazione notturna**: Attivazione automatica 2:00-5:35
-- **Gestione backlight**: Controllo intelligente illuminazione
+
+-   **Antiburn automatico**: Previene danneggiamento display
+-   **Schedulazione notturna**: Attivazione automatica 2:00-5:35
+-   **Gestione backlight**: Controllo intelligente illuminazione
 
 ### Logging e Debug
-- **Logger ESPHome**: Abilitato per debug
-- **LVGL Debug**: Livello DEBUG attivo
-- **Boot sequence**: Sequenza di avvio controllata
+
+-   **Logger ESPHome**: Abilitato per debug
+-   **LVGL Debug**: Livello DEBUG attivo
+-   **Boot sequence**: Sequenza di avvio controllata
 
 ## Stato del Progetto
+
 Il sistema PlantDisplay è completamente operativo con le seguenti funzionalità:
 
-- **Piante**: Monitoraggio di 4 piante con dati in tempo reale per conduttività, illuminamento, temperatura, e umidità. Interfaccia grafica aggiornata e coerente.
-- **Climatizzazione**: Controllo di 4 condizionatori attraverso interfaccia LVGL.
-- **Controlli Generali**: Gestione di luci, ventole, irrigazione, allarme, musica e controllo garage.
-- **Meteo**: Condizioni attuali e previsioni a 3 giorni.
+-   **Piante**: Monitoraggio di 4 piante con dati in tempo reale per conduttività, Luce, temperatura, e umidità. Interfaccia grafica aggiornata e coerente.
+-   **Climatizzazione**: Controllo di 4 condizionatori attraverso interfaccia LVGL.
+-   **Controlli Generali**: Gestione di luci, ventole, irrigazione, allarme, musica e controllo garage.
+-   **Meteo**: Condizioni attuali e previsioni a 3 giorni.
 
 **Aggiornamenti Recenti**:
-- **Font Uniformi**: Tutte le card delle piante ora usano font uniformi per un'interfaccia coerente.
-- **Risolto Problema dei Caratteri Speciali**: Sostituiti caratteri µ con u per compatibilità.
-- **Aggiornamento Dati Sensori**: Convalidata l'acquisizione in tempo reale dei dati dei sensori.
+
+-   **Font Uniformi**: Tutte le card delle piante ora usano font uniformi per un'interfaccia coerente.
+-   **Risolto Problema dei Caratteri Speciali**: Sostituiti caratteri µ con u per compatibilità.
+-   **Aggiornamento Dati Sensori**: Convalidata l'acquisizione in tempo reale dei dati dei sensori.
 
 ## Sviluppi Futuri
+
 1. **Sensori fisici avanzati**: Migliorare l'integrazione con sensori fisici completi.
 2. **API Meteo**: Incorporare dati meteo in tempo reale tramite API.
 3. **Notifiche Push**: Implementare avvisi per condizioni critiche delle piante.
@@ -175,40 +199,46 @@ Il sistema PlantDisplay è completamente operativo con le seguenti funzionalità
 ## Installazione e Utilizzo
 
 ### Prerequisiti
+
 1. **ESPHome**: Versione 2025.4.2 o superiore
 2. **Home Assistant**: Con API configurata
 3. **Hardware**: ESP32-S3 con display Waveshare 800x480
 
 ### Setup Iniziale
+
 1. Clonare il repository del progetto
 2. Configurare `secrets.yaml` con:
-   ```yaml
-   wifi_ssid: "Il_Tuo_SSID"
-   wifi_password: "La_Tua_Password"
-   api_encryption_key: "La_Tua_Chiave_API"
-   ```
+    ```yaml
+    wifi_ssid: "Il_Tuo_SSID"
+    wifi_password: "La_Tua_Password"
+    api_encryption_key: "La_Tua_Chiave_API"
+    ```
 3. Caricare le immagini nella cartella `assets/`
 4. Compilare e flashare il firmware:
-   ```bash
-   esphome compile plantdisplay.yaml
-   esphome upload plantdisplay.yaml
-   ```
+    ```bash
+    esphome compile plantdisplay.yaml
+    esphome upload plantdisplay.yaml
+    ```
 
 ### Configurazione Home Assistant
-Assicurarsi che i seguenti sensori siano configurati in Home Assistant:
-- `sensor.plant_sensor_b90c_conduttivita` (Anthurium 1)
-- `sensor.plant_sensor_a299_conduttivita` (Anthurium 2)
-- `sensor.plant_sensor_b90a_conduttivita` (Alstroemeria)
-- `sensor.plant_sensor_b90e_conduttivita` (Graptosedum)
 
-E i relativi sensori per illuminamento, temperatura e umidità.
+Assicurarsi che i seguenti sensori siano configurati in Home Assistant:
+
+-   `sensor.plant_sensor_b90c_conduttivita` (Anthurium 1)
+-   `sensor.plant_sensor_a299_conduttivita` (Anthurium 2)
+-   `sensor.plant_sensor_b90a_conduttivita` (Alstroemeria)
+-   `sensor.plant_sensor_b90e_conduttivita` (Graptosedum)
+
+E i relativi sensori per Luce, temperatura e umidità.
 
 ## Note Tecniche
-- Il progetto utilizza componenti sperimentali ESP-IDF
-- Richiede ESPHome 2025.4.2+ per compatibilità LVGL
-- PSRAM necessaria per buffer display completo
-- CH422G richiede driver specifico per I/O expansion
-- Font Montserrat caricato automaticamente da Google Fonts
+
+-   Il progetto utilizza componenti sperimentali ESP-IDF
+-   Richiede ESPHome 2025.4.2+ per compatibilità LVGL
+-   PSRAM necessaria per buffer display completo
+-   CH422G richiede driver specifico per I/O expansion
+-   Font Montserrat caricato automaticamente da Google Fonts
 
 ---
-*Documentazione generata automaticamente - Ultima modifica: 26 Gennaio 2025*
+
+_Documentazione generata automaticamente - Ultima modifica: 26 Gennaio 2025_

@@ -1,0 +1,239 @@
+sensor:
+    - platform: homeassistant
+      name: "Conduttività"
+      id: ${prefix}_conductivity
+      entity_id: ${entity_prefix}_conduttivita
+      unit_of_measurement: "uS/cm"
+      icon: "mdi:flash"
+      accuracy_decimals: 0
+      device_class: "voltage"
+      state_class: "measurement"
+      on_value:
+          then:
+              - logger.log:
+                    format: "[${prefix}] Conduttività ricevuta: %.0f uS/cm"
+                    args: ["x"]
+                    level: INFO
+              - lvgl.label.update:
+                    id: ${prefix}_conductivity_label
+                    text: !lambda |
+                        return ("Fertilita: " + to_string((int)x) + " uS/cm").c_str();
+                    text_color: !lambda |
+                        float min_conductivity = ${conductivity[0]};
+                        float max_conductivity = ${conductivity[1]};
+                        if (x < min_conductivity || x > max_conductivity) {
+                            return lv_color_hex(0xFF5722);  // Rosso per fuori range
+                        } else {
+                            return lv_color_hex(0x424242);  // Grigio scuro per OK
+                        }
+              - lvgl.label.update:
+                    id: ${prefix}_conductivity_arrow
+                    text: !lambda |
+                        float min_conductivity = ${conductivity[0]};
+                        float max_conductivity = ${conductivity[1]};
+                        if (x < min_conductivity) {
+                            return id(mdi_arrow_down).c_str();
+                        } else if (x > max_conductivity) {
+                            return id(mdi_arrow_up).c_str();
+                        } else {
+                            return "";
+                        }
+                    hidden: !lambda |
+                        float min_conductivity = ${conductivity[0]};
+                        float max_conductivity = ${conductivity[1]};
+                        return (x >= min_conductivity && x <= max_conductivity);
+
+    - platform: homeassistant
+      name: "Umidità"
+      id: ${prefix}_humidity
+      entity_id: ${entity_prefix}_umidita
+      unit_of_measurement: "%"
+      icon: "mdi:water-percent"
+      accuracy_decimals: 0
+      device_class: "humidity"
+      state_class: "measurement"
+      on_value:
+          then:
+              - logger.log:
+                    format: "[${prefix}] Umidità ricevuta: %.0f%%"
+                    args: ["x"]
+                    level: INFO
+              - lvgl.label.update:
+                    id: ${prefix}_humidity_label
+                    text: !lambda |
+                        return ("Umidita: " + to_string((int)x) + "%").c_str();
+                    text_color: !lambda |
+                        float min_humidity = ${humidity[0]};
+                        float max_humidity = ${humidity[1]};
+                        if (x < min_humidity || x > max_humidity) {
+                            return lv_color_hex(0xFF5722);  // Rosso per fuori range
+                        } else {
+                            return lv_color_hex(0x424242);  // Grigio scuro per OK
+                        }
+              - lvgl.label.update:
+                    id: ${prefix}_humidity_arrow
+                    text: !lambda |
+                        float min_humidity = ${humidity[0]};
+                        float max_humidity = ${humidity[1]};
+                        if (x < min_humidity) {
+                            return id(mdi_arrow_down).c_str();
+                        } else if (x > max_humidity) {
+                            return id(mdi_arrow_up).c_str();
+                        } else {
+                            return "";
+                        }
+                    hidden: !lambda |
+                        float min_humidity = ${humidity[0]};
+                        float max_humidity = ${humidity[1]};
+                        return (x >= min_humidity && x <= max_humidity);
+
+    - platform: homeassistant
+      name: "Luce"
+      id: ${prefix}_light
+      entity_id: ${entity_prefix}_illuminamento
+      unit_of_measurement: "lx"
+      icon: "mdi:brightness-6"
+      accuracy_decimals: 0
+      device_class: "illuminance"
+      state_class: "measurement"
+      on_value:
+          then:
+              - logger.log:
+                    format: "[${prefix}] Luce ricevuta: %.0f lx"
+                    args: ["x"]
+                    level: INFO
+              - lvgl.label.update:
+                    id: ${prefix}_light_label
+                    text: !lambda |
+                        return ("Luce: " + to_string((int)x) + " lx").c_str();
+                    text_color: !lambda |
+                        float min_light = ${light[0]};
+                        float max_light = ${light[1]};
+                        if (x < min_light || x > max_light) {
+                            return lv_color_hex(0xFF5722);  // Rosso per fuori range
+                        } else {
+                            return lv_color_hex(0x424242);  // Grigio scuro per OK
+                        }
+              - lvgl.label.update:
+                    id: ${prefix}_light_arrow
+                    text: !lambda |
+                        float min_light = ${light[0]};
+                        float max_light = ${light[1]};
+                        if (x < min_light) {
+                            return id(mdi_arrow_down).c_str();
+                        } else if (x > max_light) {
+                            return id(mdi_arrow_up).c_str();
+                        } else {
+                            return "";
+                        }
+                    hidden: !lambda |
+                        float min_light = ${light[0]};
+                        float max_light = ${light[1]};
+                        return (x >= min_light && x <= max_light);
+
+    - platform: homeassistant
+      name: "Temperatura"
+      id: ${prefix}_temperature
+      entity_id: ${entity_prefix}_temperatura
+      unit_of_measurement: "°C"
+      icon: "mdi:thermometer"
+      accuracy_decimals: 1
+      device_class: "temperature"
+      state_class: "measurement"
+      on_value:
+          then:
+              - logger.log:
+                    format: "[${prefix}] Temperatura ricevuta: %.1f°C"
+                    args: ["x"]
+                    level: INFO
+              - lvgl.label.update:
+                    id: ${prefix}_temperature_label
+                    text: !lambda |
+                        char buffer[32];
+                        sprintf(buffer, "Temperatura: %.1f °C", x);
+                        return buffer;
+                    text_color: !lambda |
+                        float min_temperature = ${temperature[0]};
+                        float max_temperature = ${temperature[1]};
+                        if (x < min_temperature || x > max_temperature) {
+                            return lv_color_hex(0xFF5722);  // Rosso per fuori range
+                        } else {
+                            return lv_color_hex(0x424242);  // Grigio scuro per OK
+                        }
+              - lvgl.label.update:
+                    id: ${prefix}_temperature_arrow
+                    text: !lambda |
+                        float min_temperature = ${temperature[0]};
+                        float max_temperature = ${temperature[1]};
+                        if (x < min_temperature) {
+                            return id(mdi_arrow_down).c_str();
+                        } else if (x > max_temperature) {
+                            return id(mdi_arrow_up).c_str();
+                        } else {
+                            return "";
+                        }
+                    hidden: !lambda |
+                        float min_temperature = ${temperature[0]};
+                        float max_temperature = ${temperature[1]};
+                        return (x >= min_temperature && x <= max_temperature);
+
+    - platform: template
+      name: "${prefix} status"
+      id: ${prefix}_all_in_range
+      lambda: |-
+          // Controllo se tutti i sensori hanno ricevuto dati
+          bool conductivity_valid = id(${prefix}_conductivity).has_state();
+          bool humidity_valid = id(${prefix}_humidity).has_state();
+          bool light_valid = id(${prefix}_light).has_state();
+          bool temperature_valid = id(${prefix}_temperature).has_state();
+
+          // Se mancano dei valori, ritorna stato intermedio
+          if (!conductivity_valid || !humidity_valid || !light_valid || !temperature_valid) {
+              return 0.5;  // Stato intermedio per valori mancanti
+          }
+
+          // Ora che sappiamo che tutti i sensori hanno dati, leggiamo i valori
+          float conductivity = id(${prefix}_conductivity).state;
+          float humidity = id(${prefix}_humidity).state;
+          float light = id(${prefix}_light).state;
+          float temperature = id(${prefix}_temperature).state;
+
+          // Controllo range conduttività
+          float min_conductivity = ${conductivity[0]};
+          float max_conductivity = ${conductivity[1]};
+          bool conductivity_ok = (conductivity >= min_conductivity && conductivity <= max_conductivity);
+
+          // Controllo range umidità
+          float min_humidity = ${humidity[0]};
+          float max_humidity = ${humidity[1]};
+          bool humidity_ok = (humidity >= min_humidity && humidity <= max_humidity);
+
+          // Controllo range luce
+          float min_light = ${light[0]};
+          float max_light = ${light[1]};
+          bool light_ok = (light >= min_light && light <= max_light);
+
+          // Controllo range temperatura
+          float min_temperature = ${temperature[0]};
+          float max_temperature = ${temperature[1]};
+          bool temperature_ok = (temperature >= min_temperature && temperature <= max_temperature);
+
+          // Ritorna 1 se tutti sono nel range, 0 se fuori range
+          return (conductivity_ok && humidity_ok && light_ok && temperature_ok) ? 1.0 : 0.0;
+      update_interval: 30s
+      on_value:
+          then:
+              - logger.log:
+                    format: "[${prefix}] Stato generale: %s"
+                    args: ['x == 1.0 ? "OK" : (x == 0.5 ? "VALORI MANCANTI" : "FUORI RANGE")']
+                    level: INFO
+              - lvgl.widget.update:
+                    id: ${prefix}_card
+                    border_color: !lambda |
+                        if (x == 1.0) {
+                            return lv_color_hex(0x4CAF50);  // Verde per tutto OK
+                        } else if (x == 0.5) {
+                            return lv_color_hex(0x9E9E9E);  // Grigio per valori mancanti
+                        } else {
+                            return lv_color_hex(0xFF5722);  // Rosso per problemi
+                        }

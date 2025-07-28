@@ -6,7 +6,7 @@ set -e
 
 PROJECT_NAME="plantdisplay"
 YAML_FILE="${PROJECT_NAME}.yaml"
-
+DEVICE="/dev/cu.usbmodem83301"
 # Colori per output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -63,8 +63,8 @@ upload() {
         print_error "File $YAML_FILE non trovato!"
         exit 1
     fi
-    
-    esphome upload "$YAML_FILE"
+
+    esphome upload "$YAML_FILE" --device "$DEVICE"
     print_success "Upload completato!"
 }
 
@@ -191,8 +191,8 @@ monitor() {
         print_error "File $YAML_FILE non trovato!"
         exit 1
     fi
-    
-    esphome logs "$YAML_FILE" --device /dev/cu.usbserial-*
+
+    esphome logs "$YAML_FILE" --device "$DEVICE"
 }
 
 # Help
@@ -205,6 +205,7 @@ show_help() {
     echo "  compile       Compila il progetto"
     echo "  upload        Upload firmware via USB"
     echo "  upload-ota    Upload firmware via OTA"
+    echo "  deploy        Compila e carica via USB"
     echo "  logs          Visualizza logs del dispositivo"
     echo "  validate      Valida la configurazione YAML"
     echo "  clean         Pulisce i file di build"
@@ -236,6 +237,10 @@ case "$1" in
         ;;
     upload-ota)
         upload_ota
+        ;;
+    deploy)
+        compile
+        upload
         ;;
     logs)
         logs

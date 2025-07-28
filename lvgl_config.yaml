@@ -15,38 +15,51 @@ image:
       id: graptosedum_img
       resize: 120x120
       type: RGB565
+    - file: "assets/Cactus.jpg"
+      id: cactus_img
+      resize: 120x120
+      type: RGB565
 
-# Font necessari per LVGL con caratteri speciali
+# Font necessari per LVGL con caratteri speciali (font locali)
 font:
-    - file: "gfonts://Montserrat"
+    - file: "fonts/Montserrat-Regular.ttf"
       id: montserrat_10
       size: 10
       glyphs: "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~ àáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞß°µ€"
 
-    - file: "gfonts://Montserrat"
+    - file: "fonts/Montserrat-Regular.ttf"
       id: montserrat_12
       size: 12
       glyphs: "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~ àáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞß°µ€"
 
-    - file: "gfonts://Montserrat"
+    - file: "fonts/Montserrat-Regular.ttf"
       id: montserrat_14
       size: 14
       glyphs: "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~ àáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞß°µ€"
 
-    - file: "gfonts://Montserrat"
+    - file: "fonts/Montserrat-Medium.ttf"
       id: montserrat_16
       size: 16
       glyphs: "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~ àáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞß°µ€"
 
-    - file: "gfonts://Montserrat"
+    - file: "fonts/Montserrat-Medium.ttf"
       id: montserrat_20
       size: 20
       glyphs: "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~ àáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞß°µ€"
 
-    - file: "gfonts://Montserrat"
+    - file: "fonts/Montserrat-Bold.ttf"
       id: montserrat_32
       size: 32
       glyphs: "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~ àáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞß°µ€"
+
+    # Material Design Icons per interfaccia (font locali)
+    - file: "fonts/materialdesignicons-webfont.ttf"
+      id: material_icons_16
+      size: 16
+      glyphs:
+          - "\U000F0737" # mdi-arrow-up-bold
+          - "\U000F072E" # mdi-arrow-down-bold
+          - "\U000F0E1E" # mdi-check-bold
 
 # Configurazione principale LVGL
 lvgl:
@@ -80,271 +93,77 @@ lvgl:
                                     id: plants_container
                                     width: 100%
                                     height: 100%
-                                    bg_color: 0xF5F5F5
-                                    border_width: 0
-                                    pad_all: 5
-                                    pad_top: 20
-                                    pad_left: 20
+                                    align: CENTER
+                                    pad_all: 2
+                                    bg_opa: TRANSP
+                                    border_opa: TRANSP
                                     layout:
-                                        type: flex
-                                        flex_flow: row_wrap
-                                        pad_row: 10
-                                        pad_column: 10
+                                        type: GRID # split the rows and the columns proportionally
+                                        grid_columns: [FR(1), FR(1)]
+                                        grid_rows: [FR(1), FR(1), FR(1)]
                                     widgets:
                                         # Plant cards using common structure
                                         # Plant 1 - Anthurium 1
-                                        - <<: &plant_card_base
-                                              obj:
-                                                  id: plant1_card
-                                                  width: 50%
-                                                  height: 50%
-                                                  bg_color: 0xFFFFFF
-                                                  border_width: 1
-                                                  border_color: 0xE0E0E0
-                                                  radius: 8
-                                                  pad_all: 8
-                                                  layout:
-                                                      type: flex
-                                                      flex_flow: row
-                                                  widgets:
-                                                      - <<: &plant_text_section
-                                                            obj:
-                                                                flex_grow: 7
-                                                                bg_color: 0xFFFFFF
-                                                                border_width: 0
-                                                                pad_all: 5
-                                                                widgets:
-                                                                    - label:
-                                                                          text: "Anthurium 1"
-                                                                          text_color: 0x2E7D32
-                                                                          text_font: montserrat_16
-                                                                    - label:
-                                                                          id: plant1_conductivity_label
-                                                                          text: "Conduttivita: -- uS/cm"
-                                                                          text_color: 0x424242
-                                                                          text_font: montserrat_12
-                                                                          y: 17
-                                                                    - label:
-                                                                          id: plant1_light_label
-                                                                          text: "Illuminamento: -- lx"
-                                                                          text_color: 0x424242
-                                                                          text_font: montserrat_12
-                                                                          y: 30
-                                                                    - label:
-                                                                          id: plant1_temperature_label
-                                                                          text: "Temperatura: -- °C"
-                                                                          text_color: 0x424242
-                                                                          text_font: montserrat_12
-                                                                          y: 45
-                                                                    - label:
-                                                                          id: plant1_humidity_label
-                                                                          text: "Umidita: --%"
-                                                                          text_color: 0x424242
-                                                                          text_font: montserrat_12
-                                                                          y: 60
-                                                      - obj:
-                                                            flex_grow: 3
-                                                            bg_color: 0xE8F5E8
-                                                            border_width: 1
-                                                            border_color: 0xC8E6C9
-                                                            radius: 4
-                                                            widgets:
-                                                                - image:
-                                                                      src: anthurium_img
-                                                                      align: center
-                                                                      width: 100%
-                                                                      height: 100%
-                                                                      image_recolor_opa: 0
-                                                                      opa: 100%
-
-                                        # Plant 2 - Anthurium 2
-                                        - obj:
-                                              id: plant2_card
-                                              width: 48%
-                                              height: 45%
-                                              bg_color: 0xFFFFFF
-                                              border_width: 1
-                                              border_color: 0xE0E0E0
-                                              radius: 8
-                                              pad_all: 8
-                                              layout:
-                                                  type: flex
-                                                  flex_flow: row
-                                              widgets:
-                                                  - obj:
-                                                        flex_grow: 7
-                                                        bg_color: 0xFFFFFF
-                                                        border_width: 0
-                                                        pad_all: 5
-                                                        widgets:
-                                                            - label:
-                                                                  text: "Anthurium 2"
-                                                                  text_color: 0x2E7D32
-                                                                  text_font: montserrat_16
-                                                            - label:
-                                                                  id: plant2_conductivity_label
-                                                                  text: "Conduttivita: -- uS/cm"
-                                                                  text_color: 0x424242
-                                                                  text_font: montserrat_12
-                                                                  y: 15
-                                                            - label:
-                                                                  id: plant2_light_label
-                                                                  text: "Illuminamento: -- lx"
-                                                                  text_color: 0x424242
-                                                                  text_font: montserrat_12
-                                                                  y: 30
-                                                            - label:
-                                                                  id: plant2_temperature_label
-                                                                  text: "Temperatura: -- °C"
-                                                                  text_color: 0x424242
-                                                                  text_font: montserrat_12
-                                                                  y: 45
-                                                            - label:
-                                                                  id: plant2_humidity_label
-                                                                  text: "Umidita: --%"
-                                                                  text_color: 0x424242
-                                                                  text_font: montserrat_12
-                                                                  y: 60
-                                                  - obj:
-                                                        flex_grow: 3
-                                                        bg_color: 0xFCE4EC
-                                                        border_width: 1
-                                                        border_color: 0xF8BBD9
-                                                        radius: 4
-                                                        widgets:
-                                                            - image:
-                                                                  src: anthurium_img
-                                                                  align: center
-                                                                  width: 100%
-                                                                  height: 100%
-                                                                  image_recolor_opa: 0
-                                                                  opa: 100%
-
-                                        # Plant 3 - Alstroemeria
-                                        - obj:
-                                              id: plant3_card
-                                              width: 48%
-                                              height: 45%
-                                              bg_color: 0xFFFFFF
-                                              border_width: 1
-                                              border_color: 0xE0E0E0
-                                              radius: 8
-                                              pad_all: 8
-                                              layout:
-                                                  type: flex
-                                                  flex_flow: row
-                                              widgets:
-                                                  - obj:
-                                                        flex_grow: 7
-                                                        bg_color: 0xFFFFFF
-                                                        border_width: 0
-                                                        pad_all: 5
-                                                        widgets:
-                                                            - label:
-                                                                  text: "Alstroemeria"
-                                                                  text_color: 0x2E7D32
-                                                                  text_font: montserrat_16
-                                                            - label:
-                                                                  id: plant3_conductivity_label
-                                                                  text: "Conduttivita: -- uS/cm"
-                                                                  text_color: 0x424242
-                                                                  text_font: montserrat_12
-                                                                  y: 15
-                                                            - label:
-                                                                  id: plant3_light_label
-                                                                  text: "Illuminamento: -- lx"
-                                                                  text_color: 0x424242
-                                                                  text_font: montserrat_12
-                                                                  y: 30
-                                                            - label:
-                                                                  id: plant3_temperature_label
-                                                                  text: "Temperatura: -- °C"
-                                                                  text_color: 0x424242
-                                                                  text_font: montserrat_12
-                                                                  y: 45
-                                                            - label:
-                                                                  id: plant3_humidity_label
-                                                                  text: "Umidita: --%"
-                                                                  text_color: 0x424242
-                                                                  text_font: montserrat_12
-                                                                  y: 60
-                                                  - obj:
-                                                        flex_grow: 3
-                                                        bg_color: 0xE0F2F1
-                                                        border_width: 1
-                                                        border_color: 0xB2DFDB
-                                                        radius: 4
-                                                        widgets:
-                                                            - image:
-                                                                  src: alstroemeria_img
-                                                                  align: center
-                                                                  width: 100%
-                                                                  height: 100%
-                                                                  image_recolor_opa: 0
-                                                                  opa: 100%
-
-                                        # Plant 4 - Graptosedum
-                                        - obj:
-                                              id: plant4_card
-                                              width: 48%
-                                              height: 45%
-                                              bg_color: 0xFFFFFF
-                                              border_width: 1
-                                              border_color: 0xE0E0E0
-                                              radius: 8
-                                              pad_all: 8
-                                              layout:
-                                                  type: flex
-                                                  flex_flow: row
-                                              widgets:
-                                                  - obj:
-                                                        flex_grow: 7
-                                                        bg_color: 0xFFFFFF
-                                                        border_width: 0
-                                                        pad_all: 5
-                                                        widgets:
-                                                            - label:
-                                                                  text: "Graptosedum"
-                                                                  text_color: 0x2E7D32
-                                                                  text_font: montserrat_16
-                                                            - label:
-                                                                  id: plant4_conductivity_label
-                                                                  text: "Conduttivita: -- uS/cm"
-                                                                  text_color: 0x424242
-                                                                  text_font: montserrat_12
-                                                                  y: 15
-                                                            - label:
-                                                                  id: plant4_light_label
-                                                                  text: "Illuminamento: -- lx"
-                                                                  text_color: 0x424242
-                                                                  text_font: montserrat_12
-                                                                  y: 30
-                                                            - label:
-                                                                  id: plant4_temperature_label
-                                                                  text: "Temperatura: -- °C"
-                                                                  text_color: 0x424242
-                                                                  text_font: montserrat_12
-                                                                  y: 45
-                                                            - label:
-                                                                  id: plant4_humidity_label
-                                                                  text: "Umidita: --%"
-                                                                  text_color: 0x424242
-                                                                  text_font: montserrat_12
-                                                                  y: 60
-                                                  - obj:
-                                                        flex_grow: 3
-                                                        bg_color: 0xFFF3E0
-                                                        border_width: 1
-                                                        border_color: 0xFFCC02
-                                                        radius: 4
-                                                        widgets:
-                                                            - image:
-                                                                  src: graptosedum_img
-                                                                  align: center
-                                                                  width: 100%
-                                                                  height: 100%
-                                                                  image_recolor_opa: 0
-                                                                  opa: 100%
+                                        - !include {
+                                              file: plant_card.yaml,
+                                              vars:
+                                                  {
+                                                      plant_prefix: plant1,
+                                                      name: "Anthurium 1",
+                                                      row: 0,
+                                                      col: 0,
+                                                      image_src: anthurium_img,
+                                                      image_bg_color: 0xFFE8E8,
+                                                  },
+                                          }
+                                        - !include {
+                                              file: plant_card.yaml,
+                                              vars:
+                                                  {
+                                                      plant_prefix: plant2,
+                                                      name: "Anthurium 2",
+                                                      row: 0,
+                                                      col: 1,
+                                                      image_src: anthurium_img,
+                                                      image_bg_color: 0xE8F0FF,
+                                                  },
+                                          }
+                                        - !include {
+                                              file: plant_card.yaml,
+                                              vars:
+                                                  {
+                                                      plant_prefix: plant3,
+                                                      name: "Alstroemeria",
+                                                      row: 1,
+                                                      col: 0,
+                                                      image_src: alstroemeria_img,
+                                                      image_bg_color: 0xFFF8E8,
+                                                  },
+                                          }
+                                        - !include {
+                                              file: plant_card.yaml,
+                                              vars:
+                                                  {
+                                                      plant_prefix: plant4,
+                                                      name: "Graptosedum",
+                                                      row: 1,
+                                                      col: 1,
+                                                      image_src: graptosedum_img,
+                                                      image_bg_color: 0xF0E8FF,
+                                                  },
+                                          }
+                                        - !include {
+                                              file: plant_card.yaml,
+                                              vars:
+                                                  {
+                                                      plant_prefix: plant5,
+                                                      name: "Cactus",
+                                                      row: 2,
+                                                      col: 0,
+                                                      image_src: cactus_img,
+                                                      image_bg_color: 0xE8FFE8,
+                                                  },
+                                          }
 
                         # Tab 2: Condizionatori
                         - name: Clima

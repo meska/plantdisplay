@@ -1,8 +1,55 @@
+# Variabili globali
+globals:
+    - id: mdi_arrow_up
+      type: std::string
+      initial_value: '"\U000F0737"'
+    - id: mdi_arrow_down
+      type: std::string
+      initial_value: '"\U000F072E"'
+    - id: mdi_check
+      type: std::string
+      initial_value: '"\U000F0E1E"'
+
 # Include file esterni per organizzazione modulare
 packages:
-  secrets: !include secrets.yaml
-  lvgl_ui: !include lvgl_config.yaml
-
+    secrets: !include secrets.yaml
+    lvgl_ui: !include lvgl_config.yaml
+    anthurium1: !include
+        file: plant_sensors.yaml
+        vars:
+            prefix: plant1
+            entity_prefix: sensor.plant_sensor_b90c
+            light: [1, 4000]
+            conductivity: [250, 2000]
+            temperature: [15.0, 32.0]
+            humidity: [16, 65]
+    anthurium2: !include
+        file: plant_sensors.yaml
+        vars:
+            prefix: plant2
+            entity_prefix: sensor.plant_sensor_a299
+            light: [1, 4000]
+            conductivity: [250, 2000]
+            temperature: [15.0, 32.0]
+            humidity: [16, 65]
+    alstroemeria: !include
+        file: plant_sensors.yaml
+        vars:
+            prefix: plant3
+            entity_prefix: sensor.plant_sensor_b90a
+            light: [1, 4000]
+            conductivity: [350, 2000]
+            temperature: [8.0, 32.0]
+            humidity: [15, 60]
+    graptoseum: !include
+        file: plant_sensors.yaml
+        vars:
+            prefix: plant4
+            entity_prefix: sensor.plant_sensor_b90e
+            light: [1, 4000]
+            conductivity: [300, 1000]
+            temperature: [5.0, 35.0]
+            humidity: [7, 50]
 esphome:
     name: plantdisplay
     friendly_name: PlantDisplay
@@ -78,7 +125,6 @@ light:
       id: lcdbacklight
       name: LCD Backlight
       icon: mdi:wall-sconce-flat-outline
-      disabled_by_default: true
       restore_mode: ALWAYS_ON
       on_turn_off:
           - script.execute: start_antiburn
@@ -103,7 +149,6 @@ switch:
       icon: mdi:television-shimmer
       optimistic: true
       entity_category: "config"
-      disabled_by_default: true
       turn_on_action:
           - logger.log: "Starting Antiburn"
           - if:
@@ -125,7 +170,7 @@ switch:
 display:
     - platform: rpi_dpi_rgb
       id: waveshare_display
-      update_interval: 5s
+      update_interval: never
       auto_clear_enabled: false
       color_order: RGB
       pclk_frequency: 16MHZ
@@ -184,6 +229,7 @@ touchscreen:
 
 # Enable logging
 logger:
+    # level: VERY_VERBOSE
 
 # Configurazioni di rete e API incluse da secrets.yaml
 
@@ -211,447 +257,47 @@ time:
             then:
                 - switch.turn_off: switch_antiburn
 
-# Configurazione ranges ottimali per le piante
-globals:
-  # Pianta 1 - Anthurium 1: range ottimali
-  - id: plant1_status_ok
-    type: bool
-    initial_value: 'true'
-  # Pianta 2 - Anthurium 2: range ottimali  
-  - id: plant2_status_ok
-    type: bool
-    initial_value: 'true'
-  # Pianta 3 - Alstroemeria: range ottimali
-  - id: plant3_status_ok
-    type: bool
-    initial_value: 'true'
-  # Pianta 4 - Graptosedum: range ottimali
-  - id: plant4_status_ok
-    type: bool
-    initial_value: 'true'
-
-# Funzioni helper per il controllo dei range e aggiornamento script esistenti
-
 # Sensori per le piante - Dati reali da Home Assistant
 sensor:
-  # Pianta 1 - Anthurium 1 (b90c)
-  - platform: homeassistant
-    name: "Pianta 1 Conduttività"
-    id: plant1_conductivity
-    entity_id: sensor.plant_sensor_b90c_conduttivita
-    unit_of_measurement: "uS/cm"
-    icon: "mdi:flash"
-    accuracy_decimals: 0
-    device_class: "voltage"
-    state_class: "measurement"
-    on_value:
-      then:
-        - lvgl.label.update:
-            id: plant1_conductivity_label
-            text: !lambda |
-              return ("Conduttivita: " + to_string((int)x) + " uS/cm").c_str();
-        - lambda: |
-            // Anthurium range: 350-800 µS/cm per piante tropicali
-            bool conductivity_ok = (x >= 350 && x <= 800);
-            bool light_ok = (!id(plant1_light).has_state() || (id(plant1_light).state >= 1000 && id(plant1_light).state <= 4000));
-            bool temp_ok = (!id(plant1_temperature).has_state() || (id(plant1_temperature).state >= 18.0 && id(plant1_temperature).state <= 26.0));
-            bool humidity_ok = (!id(plant1_humidity).has_state() || (id(plant1_humidity).state >= 45 && id(plant1_humidity).state <= 75));
-            
-            bool overall_ok = conductivity_ok && light_ok && temp_ok && humidity_ok;
-            id(plant1_status_ok) = overall_ok;
-        - if:
-            condition:
-              lambda: 'return id(plant1_status_ok);'
-            then:
-              - lvgl.widget.update:
-                  id: plant1_card
-                  border_color: 0xE0E0E0
-              - lvgl.label.update:
-                  id: plant1_conductivity_label
-                  text_color: 0x424242
-            else:
-              - lvgl.widget.update:
-                  id: plant1_card
-                  border_color: 0xFF5722
-              - lvgl.label.update:
-                  id: plant1_conductivity_label
-                  text_color: 0xFF5722
-    
-  - platform: homeassistant
-    name: "Pianta 1 Illuminamento"
-    id: plant1_light
-    entity_id: sensor.plant_sensor_b90c_illuminamento
-    unit_of_measurement: "lx"
-    icon: "mdi:brightness-6"
-    accuracy_decimals: 0
-    device_class: "illuminance"
-    state_class: "measurement"
-    on_value:
-      then:
-        - lvgl.label.update:
-            id: plant1_light_label
-            text: !lambda |
-              return ("Illuminamento: " + to_string((int)x) + " lx").c_str();
-        - lambda: |
-            // Check all sensors for plant 1
-            bool conductivity_ok = (!id(plant1_conductivity).has_state() || (id(plant1_conductivity).state >= 350 && id(plant1_conductivity).state <= 800));
-            bool light_ok = (x >= 1000 && x <= 4000);
-            bool temp_ok = (!id(plant1_temperature).has_state() || (id(plant1_temperature).state >= 18.0 && id(plant1_temperature).state <= 26.0));
-            bool humidity_ok = (!id(plant1_humidity).has_state() || (id(plant1_humidity).state >= 45 && id(plant1_humidity).state <= 75));
-            
-            bool overall_ok = conductivity_ok && light_ok && temp_ok && humidity_ok;
-            id(plant1_status_ok) = overall_ok;
-        - if:
-            condition:
-              lambda: 'return id(plant1_status_ok);'
-            then:
-              - lvgl.widget.update:
-                  id: plant1_card
-                  border_color: 0xE0E0E0
-            else:
-              - lvgl.widget.update:
-                  id: plant1_card
-                  border_color: 0xFF5722
-    
-  - platform: homeassistant
-    name: "Pianta 1 Temperatura"
-    id: plant1_temperature
-    entity_id: sensor.plant_sensor_b90c_temperatura
-    unit_of_measurement: "°C"
-    icon: "mdi:thermometer"
-    accuracy_decimals: 1
-    device_class: "temperature"
-    state_class: "measurement"
-    on_value:
-      then:
-        - lvgl.label.update:
-            id: plant1_temperature_label
-            text: !lambda |
-              char buffer[32];
-              sprintf(buffer, "Temperatura: %.1f °C", x);
-              return buffer;
-    
-  - platform: homeassistant
-    name: "Pianta 1 Umidità"
-    id: plant1_humidity
-    entity_id: sensor.plant_sensor_b90c_umidita
-    unit_of_measurement: "%"
-    icon: "mdi:water-percent"
-    accuracy_decimals: 0
-    device_class: "humidity"
-    state_class: "measurement"
-    on_value:
-      then:
-        - lvgl.label.update:
-            id: plant1_humidity_label
-            text: !lambda |
-              return ("Umidita: " + to_string((int)x) + "%").c_str();
-
-  # Pianta 2 - Anthurium 2 (a299)
-  - platform: homeassistant
-    name: "Pianta 2 Conduttività"
-    id: plant2_conductivity
-    entity_id: sensor.plant_sensor_a299_conduttivita
-    unit_of_measurement: "uS/cm"
-    icon: "mdi:flash"
-    accuracy_decimals: 0
-    device_class: "voltage"
-    state_class: "measurement"
-    on_value:
-      then:
-        - lvgl.label.update:
-            id: plant2_conductivity_label
-            text: !lambda |
-              return ("Conduttivita: " + to_string((int)x) + " uS/cm").c_str();
-        - lambda: |
-            // Anthurium 2 range: 350-800 µS/cm
-            bool overall_ok = (x >= 350 && x <= 800);
-            id(plant2_status_ok) = overall_ok;
-        - if:
-            condition:
-              lambda: 'return id(plant2_status_ok);'
-            then:
-              - lvgl.widget.update:
-                  id: plant2_card
-                  border_color: 0xE0E0E0
-              - lvgl.label.update:
-                  id: plant2_conductivity_label
-                  text_color: 0x424242
-            else:
-              - lvgl.widget.update:
-                  id: plant2_card
-                  border_color: 0xFF5722
-              - lvgl.label.update:
-                  id: plant2_conductivity_label
-                  text_color: 0xFF5722
-    
-  - platform: homeassistant
-    name: "Pianta 2 Illuminamento"
-    id: plant2_light
-    entity_id: sensor.plant_sensor_a299_illuminamento
-    unit_of_measurement: "lx"
-    icon: "mdi:brightness-6"
-    accuracy_decimals: 0
-    device_class: "illuminance"
-    state_class: "measurement"
-    on_value:
-      then:
-        - lvgl.label.update:
-            id: plant2_light_label
-            text: !lambda |
-              return ("Illuminamento: " + to_string((int)x) + " lx").c_str();
-    
-  - platform: homeassistant
-    name: "Pianta 2 Temperatura"
-    id: plant2_temperature
-    entity_id: sensor.plant_sensor_a299_temperatura
-    unit_of_measurement: "°C"
-    icon: "mdi:thermometer"
-    accuracy_decimals: 1
-    device_class: "temperature"
-    state_class: "measurement"
-    on_value:
-      then:
-        - lvgl.label.update:
-            id: plant2_temperature_label
-            text: !lambda |
-              char buffer[32];
-              sprintf(buffer, "Temperatura: %.1f °C", x);
-              return buffer;
-    
-  - platform: homeassistant
-    name: "Pianta 2 Umidità"
-    id: plant2_humidity
-    entity_id: sensor.plant_sensor_a299_umidita
-    unit_of_measurement: "%"
-    icon: "mdi:water-percent"
-    accuracy_decimals: 0
-    device_class: "humidity"
-    state_class: "measurement"
-    on_value:
-      then:
-        - lvgl.label.update:
-            id: plant2_humidity_label
-            text: !lambda |
-              return ("Umidita: " + to_string((int)x) + "%").c_str();
-
-  # Pianta 3 - Alstroemeria (b90a) - Solo illuminamento disponibile
-  - platform: homeassistant
-    name: "Pianta 3 Conduttività"
-    id: plant3_conductivity
-    entity_id: sensor.plant_sensor_b90a_conduttivita
-    unit_of_measurement: "uS/cm"
-    icon: "mdi:flash"
-    accuracy_decimals: 0
-    device_class: "voltage"
-    state_class: "measurement"
-    on_value:
-      then:
-        - lvgl.label.update:
-            id: plant3_conductivity_label
-            text: !lambda |
-              return ("Conduttivita: " + to_string((int)x) + " uS/cm").c_str();
-        - lambda: |
-            // Alstroemeria range: 300-700 µS/cm per piante bulbose
-            bool overall_ok = (x >= 300 && x <= 700);
-            id(plant3_status_ok) = overall_ok;
-        - if:
-            condition:
-              lambda: 'return id(plant3_status_ok);'
-            then:
-              - lvgl.widget.update:
-                  id: plant3_card
-                  border_color: 0xE0E0E0
-              - lvgl.label.update:
-                  id: plant3_conductivity_label
-                  text_color: 0x424242
-            else:
-              - lvgl.widget.update:
-                  id: plant3_card
-                  border_color: 0xFF5722
-              - lvgl.label.update:
-                  id: plant3_conductivity_label
-                  text_color: 0xFF5722
-    
-  - platform: homeassistant
-    name: "Pianta 3 Illuminamento"
-    id: plant3_light
-    entity_id: sensor.plant_sensor_b90a_illuminamento
-    unit_of_measurement: "lx"
-    icon: "mdi:brightness-6"
-    accuracy_decimals: 0
-    device_class: "illuminance"
-    state_class: "measurement"
-    on_value:
-      then:
-        - lvgl.label.update:
-            id: plant3_light_label
-            text: !lambda |
-              return ("Illuminamento: " + to_string((int)x) + " lx").c_str();
-    
-  - platform: homeassistant
-    name: "Pianta 3 Temperatura"
-    id: plant3_temperature
-    entity_id: sensor.plant_sensor_b90a_temperatura
-    unit_of_measurement: "°C"
-    icon: "mdi:thermometer"
-    accuracy_decimals: 1
-    device_class: "temperature"
-    state_class: "measurement"
-    on_value:
-      then:
-        - lvgl.label.update:
-            id: plant3_temperature_label
-            text: !lambda |
-              char buffer[32];
-              sprintf(buffer, "Temperatura: %.1f °C", x);
-              return buffer;
-    
-  - platform: homeassistant
-    name: "Pianta 3 Umidità"
-    id: plant3_humidity
-    entity_id: sensor.plant_sensor_b90a_umidita
-    unit_of_measurement: "%"
-    icon: "mdi:water-percent"
-    accuracy_decimals: 0
-    device_class: "humidity"
-    state_class: "measurement"
-    on_value:
-      then:
-        - lvgl.label.update:
-            id: plant3_humidity_label
-            text: !lambda |
-              return ("Umidita: " + to_string((int)x) + "%").c_str();
-
-  # Pianta 4 - Graptosedum (b90e)
-  - platform: homeassistant
-    name: "Pianta 4 Conduttività"
-    id: plant4_conductivity
-    entity_id: sensor.plant_sensor_b90e_conduttivita
-    unit_of_measurement: "uS/cm"
-    icon: "mdi:flash"
-    accuracy_decimals: 0
-    device_class: "voltage"
-    state_class: "measurement"
-    on_value:
-      then:
-        - lvgl.label.update:
-            id: plant4_conductivity_label
-            text: !lambda |
-              return ("Conduttivita: " + to_string((int)x) + " uS/cm").c_str();
-        - lambda: |
-            // Graptosedum range: 150-400 µS/cm per piante succulente (range più basso)
-            bool overall_ok = (x >= 150 && x <= 400);
-            id(plant4_status_ok) = overall_ok;
-        - if:
-            condition:
-              lambda: 'return id(plant4_status_ok);'
-            then:
-              - lvgl.widget.update:
-                  id: plant4_card
-                  border_color: 0xE0E0E0
-              - lvgl.label.update:
-                  id: plant4_conductivity_label
-                  text_color: 0x424242
-            else:
-              - lvgl.widget.update:
-                  id: plant4_card
-                  border_color: 0xFF5722
-              - lvgl.label.update:
-                  id: plant4_conductivity_label
-                  text_color: 0xFF5722
-    
-  - platform: homeassistant
-    name: "Pianta 4 Illuminamento"
-    id: plant4_light
-    entity_id: sensor.plant_sensor_b90e_illuminamento
-    unit_of_measurement: "lx"
-    icon: "mdi:brightness-6"
-    accuracy_decimals: 0
-    device_class: "illuminance"
-    state_class: "measurement"
-    on_value:
-      then:
-        - lvgl.label.update:
-            id: plant4_light_label
-            text: !lambda |
-              return ("Illuminamento: " + to_string((int)x) + " lx").c_str();
-    
-  - platform: homeassistant
-    name: "Pianta 4 Temperatura"
-    id: plant4_temperature
-    entity_id: sensor.plant_sensor_b90e_temperatura
-    unit_of_measurement: "°C"
-    icon: "mdi:thermometer"
-    accuracy_decimals: 1
-    device_class: "temperature"
-    state_class: "measurement"
-    on_value:
-      then:
-        - lvgl.label.update:
-            id: plant4_temperature_label
-            text: !lambda |
-              char buffer[32];
-              sprintf(buffer, "Temperatura: %.1f °C", x);
-              return buffer;
-    
-  - platform: homeassistant
-    name: "Pianta 4 Umidità"
-    id: plant4_humidity
-    entity_id: sensor.plant_sensor_b90e_umidita
-    unit_of_measurement: "%"
-    icon: "mdi:water-percent"
-    accuracy_decimals: 0
-    device_class: "humidity"
-    state_class: "measurement"
-    on_value:
-      then:
-        - lvgl.label.update:
-            id: plant4_humidity_label
-            text: !lambda |
-              return ("Umidita: " + to_string((int)x) + "%").c_str();
 
 # Sensori per climatizzatori - utilizziamo text_sensor per lo stato completo
 text_sensor:
-  - platform: homeassistant
-    name: "Soggiorno Climate State"
-    id: soggiorno_climate
-    entity_id: climate.soggiorno
-    on_value:
-      then:
-        - lvgl.label.update:
-            id: ac1_temp_label
-            text: "Stato: CONNESSO"
-        - lvgl.label.update:
-            id: ac1_target_label
-            text: "Ready"
-            
-  - platform: homeassistant
-    name: "Camera Climate State"
-    id: camera_climate
-    entity_id: climate.camera
-    on_value:
-      then:
-        - lvgl.label.update:
-            id: ac2_temp_label
-            text: "Stato: CONNESSO"
-        - lvgl.label.update:
-            id: ac2_target_label
-            text: "Ready"
-            
-  - platform: homeassistant
-    name: "Chris Climate State"
-    id: chris_climate
-    entity_id: climate.chris
-    on_value:
-      then:
-        - lvgl.label.update:
-            id: ac3_temp_label
-            text: "Stato: CONNESSO"
-        - lvgl.label.update:
-            id: ac3_target_label
-            text: "Ready"
-
-
-
-# LVGL configuration included from lvgl_config.yaml
+#     - platform: homeassistant
+#       name: "Soggiorno Climate State"
+#       id: soggiorno_climate
+#       entity_id: climate.soggiorno
+#       on_value:
+#           then:
+#               - lvgl.label.update:
+#                     id: ac1_temp_label
+#                     text: "Stato: CONNESSO"
+#               - lvgl.label.update:
+#                     id: ac1_target_label
+#                     text: "Ready"
+#
+#     - platform: homeassistant
+#       name: "Camera Climate State"
+#       id: camera_climate
+#       entity_id: climate.camera
+#       on_value:
+#           then:
+#               - lvgl.label.update:
+#                     id: ac2_temp_label
+#                     text: "Stato: CONNESSO"
+#               - lvgl.label.update:
+#                     id: ac2_target_label
+#                     text: "Ready"
+#
+#     - platform: homeassistant
+#       name: "Chris Climate State"
+#       id: chris_climate
+#       entity_id: climate.chris
+#       on_value:
+#           then:
+#               - lvgl.label.update:
+#                     id: ac3_temp_label
+#                     text: "Stato: CONNESSO"
+#               - lvgl.label.update:
+#                     id: ac3_target_label
+#                     text: "Ready"
+#
