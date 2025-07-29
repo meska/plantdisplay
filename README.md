@@ -57,14 +57,13 @@ Il sistema attualmente monitora queste piante con i loro parametri ottimali:
 
 ```
 plantdisplay/
-├── plantdisplay.yaml          # Configurazione principale ESPHome
-├── plant_sensors.yaml         # Template per sensori delle piante
-├── lvgl_config.yaml          # Configurazione interfaccia LVGL
-├── plant_card.yaml           # Template per le card delle piante
-├── fonts_config.yaml         # Configurazione font
+├── plantdisplay.yaml         # Configurazione principale ESPHome
 ├── secrets.yaml              # Configurazioni sensibili
-├── hass_token                 # Token Home Assistant
 ├── utils.sh                  # Script di utilità
+├── include/                  # Immagini delle piante
+│   ├── plant_sensors.yaml    # Template per sensori delle piante
+│   ├── lvgl_config.yaml      # Configurazione interfaccia LVGL
+│   └── plant_card.yaml       # Template per le card delle piante
 ├── assets/                   # Immagini delle piante
 │   ├── Anthurium.jpg
 │   ├── Alstroemeria.jpg
@@ -72,7 +71,7 @@ plantdisplay/
 │   └── Ggraptosedum.jpg
 ├── fonts/                    # Font per l'interfaccia
 │   ├── Montserrat-*.ttf
-│   └── materialdesignicons.*
+│   └── materialdesignicons-*.ttf
 ```
 
 ## 🚀 Installazione

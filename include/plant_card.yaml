@@ -5,7 +5,8 @@ obj:
     grid_cell_x_align: STRETCH
     grid_cell_y_align: STRETCH
     bg_color: 0xFFFFFF
-    border_width: 1
+    bg_opa: "70%"
+    border_width: 2
     border_color: 0xE0E0E0
     radius: 8
     pad_all: 8
@@ -19,8 +20,8 @@ obj:
               grid_cell_column_pos: 0 # place the widget in
               grid_cell_x_align: STRETCH
               grid_cell_y_align: STRETCH
-              bg_color: 0xFFFFFF
               border_width: 0
+              bg_opa: TRANSP
               pad_all: 2
               scrollbar_mode: "OFF"
               layout:
@@ -129,17 +130,28 @@ obj:
                         text_color: 0xFF0000
                         text_font: material_icons_16
 
-        - obj:
+        - image:
               grid_cell_column_pos: 1
               grid_cell_x_align: STRETCH
               grid_cell_y_align: STRETCH
-              bg_color: $image_bg_color
-              border_width: 1
-              border_color: 0xC8E6C9
-              radius: 4
-              widgets:
-                  - image:
-                        src: $image_src
-                        align: center
-                        width: 100%
-                        height: 100%
+              src: $image_src
+              align: center
+              radius: 8
+              clip_corner: true
+              width: 100%
+              height: 100%
+        # - obj:
+        #       grid_cell_column_pos: 1
+        #       grid_cell_x_align: STRETCH
+        #       grid_cell_y_align: STRETCH
+        #       bg_color: $image_bg_color
+        #       bg_opa: "50%"
+        #       border_width: 1
+        #       border_color: 0xC8E6C9
+        #       radius: 4
+        #       widgets:
+        #           - image:
+        #                 src: $image_src
+        #                 align: center
+        #                 width: 100%
+        #                 height: 100%

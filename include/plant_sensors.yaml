@@ -10,10 +10,6 @@ sensor:
       state_class: "measurement"
       on_value:
           then:
-              - logger.log:
-                    format: "[${prefix}] Conduttività ricevuta: %.0f uS/cm"
-                    args: ["x"]
-                    level: INFO
               - lvgl.label.update:
                     id: ${prefix}_conductivity_label
                     text: !lambda |
@@ -57,10 +53,6 @@ sensor:
       state_class: "measurement"
       on_value:
           then:
-              - logger.log:
-                    format: "[${prefix}] Umidità ricevuta: %.0f%%"
-                    args: ["x"]
-                    level: INFO
               - lvgl.label.update:
                     id: ${prefix}_humidity_label
                     text: !lambda |
@@ -104,10 +96,6 @@ sensor:
       state_class: "measurement"
       on_value:
           then:
-              - logger.log:
-                    format: "[${prefix}] Luce ricevuta: %.0f lx"
-                    args: ["x"]
-                    level: INFO
               - lvgl.label.update:
                     id: ${prefix}_light_label
                     text: !lambda |
@@ -151,10 +139,6 @@ sensor:
       state_class: "measurement"
       on_value:
           then:
-              - logger.log:
-                    format: "[${prefix}] Temperatura ricevuta: %.1f°C"
-                    args: ["x"]
-                    level: INFO
               - lvgl.label.update:
                     id: ${prefix}_temperature_label
                     text: !lambda |
@@ -192,6 +176,7 @@ sensor:
     - platform: template
       name: "${prefix} status"
       id: ${prefix}_all_in_range
+      internal: True
       lambda: |-
           // Controllo se tutti i sensori hanno ricevuto dati
           bool conductivity_valid = id(${prefix}_conductivity).has_state();
@@ -234,10 +219,6 @@ sensor:
           return (conductivity_ok && humidity_ok && light_ok && temperature_ok) ? 1.0 : 0.0;
       on_value:
           then:
-              - logger.log:
-                    format: "[${prefix}] Stato generale: %s"
-                    args: ['x == 1.0 ? "OK" : (x == 0.5 ? "VALORI MANCANTI" : "FUORI RANGE")']
-                    level: INFO
               - lvgl.widget.update:
                     id: ${prefix}_card
                     border_color: !lambda |

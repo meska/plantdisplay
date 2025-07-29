@@ -5,19 +5,23 @@
 image:
     - file: "assets/Anthurium.jpg"
       id: anthurium_img
-      resize: 120x120
+      resize: 130x120
       type: RGB565
     - file: "assets/Alstroemeria.jpg"
       id: alstroemeria_img
-      resize: 120x120
+      resize: 130x120
       type: RGB565
     - file: "assets/Ggraptosedum.jpg"
       id: graptosedum_img
-      resize: 120x120
+      resize: 130x120
       type: RGB565
     - file: "assets/Cactus.jpg"
       id: cactus_img
-      resize: 120x120
+      resize: 130x120
+      type: RGB565
+    - file: "assets/background.jpg"
+      id: background_img
+      resize: 800x432
       type: RGB565
 
 # Font necessari per LVGL con caratteri speciali (font locali)
@@ -87,11 +91,12 @@ lvgl:
               - tabview:
                     id: main_tabview
                     position: top
-                    size: 12%
+                    size: 10%
                     tabs:
                         # Tab 1: Piante
                         - name: Piante
                           id: plants_tab
+                          bg_image_src: background_img
                           widgets:
                               - obj:
                                     id: plants_container
