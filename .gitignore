@@ -4,3 +4,4 @@
 /.esphome/
 /secrets.yaml
 /hass_token
+/.vscode/

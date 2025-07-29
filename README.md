@@ -1,244 +1,295 @@
-# PlantDisplay - Progetto ESPHome
+# PlantDisplay - Sistema di Monitoraggio Piante ESPHome
 
-## Panoramica del Progetto
+Un elegante display per il monitoraggio delle piante che visualizza i dati dei sensori ricevuti da Home Assistant su un display ESP32-S3 con interfaccia LVGL.
 
-**PlantDisplay** è un sistema di monitoraggio e controllo smart bassu su ESP32-S3 con display touchscreen da 800x480 pixel. Il dispositivo integra funzionalità di monitoraggio piante, controllo climatizzazione, gestione luci e automazioni domestiche.
+![PlantDisplay](https://img.shields.io/badge/ESPHome-Supportato-green)
+![Home Assistant](https://img.shields.io/badge/Home%20Assistant-Integrato-blue)
+![ESP32](https://img.shields.io/badge/ESP32--S3-Compatible-orange)
 
-## Hardware Utilizzato
+## 🌱 Caratteristiche
 
--   **Microcontrollore**: ESP32-S3 DevKit-C-1
--   **Display**: Waveshare RGB Display 800x480 con interfaccia RPI DPI
--   **Touchscreen**: GT911 capacitivo
--   **Memoria**: 8MB Flash + PSRAM OCTAL (64KB cache)
--   **I/O Expander**: CH422G per controllo GPIO aggiuntivi
--   **Connettività**: WiFi + Bluetooth (proxy BLE attivo)
+-   **Monitoraggio Multi-Pianta**: Supporta fino a 4 piante diverse con parametri personalizzabili
+-   **Display LVGL**: Interfaccia grafica moderna e intuitiva con immagini delle piante
+-   **Sensori Multipli**: Monitora umidità del suolo, conducibilità, temperatura e illuminazione
+-   **Indicatori Visivi**: Frecce colorate e icone che indicano quando i valori sono fuori range
+-   **Integrazione Home Assistant**: Riceve dati in tempo reale dai sensori delle piante
+-   **Design Modulare**: Configurazione organizzata in file separati per facilità di manutenzione
 
-## Architettura Software
+## 📋 Piante Supportate
 
-### Framework e Configurazione
+Il sistema attualmente monitora queste piante con i loro parametri ottimali:
 
--   **ESPHome**: v2025.4.2+ (versione minima richiesta)
--   **Framework ESP-IDF**: con ottimizzazioni avanzate
--   **LVGL**: Interfaccia grafica con buffer al 100%
--   **Home Assistant**: Integrazione completa via API
+1. **Anthurium** (2 esemplari)
 
-### Funzionalità Principali
+    - Conducibilità: 250-2000 µS/cm
+    - Temperatura: 15-32°C
+    - Umidità: 16-65%
+    - Luce: 1-10000 lux
 
-#### 1. **Monitoraggio Piante** (Tab "Piante")
+2. **Alstroemeria**
 
-Visualizza 4 piante con i seguenti parametri:
+    - Conducibilità: 350-2000 µS/cm
+    - Temperatura: 8-32°C
+    - Umidità: 15-60%
+    - Luce: 1-10000 lux
 
--   **Conduttività del suolo** (uS/cm)
--   **Luce** (lx)
--   **Temperatura** (°C)
--   **Umidità relativa** (%)
+3. **Graptosedum**
+    - Conducibilità: 300-1000 µS/cm
+    - Temperatura: 5-35°C
+    - Umidità: 7-50%
+    - Luce: 1-10000 lux
 
-**Range Ottimali per Tipo di Pianta**:
+> **Nota**: I parametri possono essere facilmente personalizzati modificando i valori in `plantdisplay.yaml`
 
--   **Anthurium 1 & 2**: 350-800 uS/cm (piante tropicali)
--   **Alstroemeria**: 300-700 uS/cm (piante bulbose)
--   **Graptosedum**: 150-400 uS/cm (piante succulente)
+## 🛠️ Hardware Richiesto
 
-**Indicatori Visivi**:
+-   **ESP32-S3-Touch-LCD-7** (Display touch da 7" con ESP32-S3 integrato)
+-   **Sensori Xiaomi Mi Flora** (o compatibili) per il monitoraggio delle piante
+-   **Home Assistant** con integrazione Xiaomi Mi Flora configurata
+-   **Alimentazione USB-C** per ESP32-S3-Touch-LCD-7
+-   **Rete WiFi** per la connessione
 
--   **Bordi delle carte**: Grigi (normale) / Rossi (valori fuori range)
--   **Testo conduttività**: Grigio scuro (normale) / Rosso (fuori range)
--   **Aggiornamento**: Dati in tempo reale da Home Assistant
-
-Ogni pianta ha un indicatore colorato:
-
--   **Anthurium 1**: Verde (0x2E7D32)
--   **Anthurium 2**: Rosa/Viola (0xFCE4EC)
--   **Alstroemeria**: Teal (0xE0F2F1)
--   **Graptosedum**: Arancione (0xFFF3E0)
-
-#### 2. **Controllo Climatizzazione** (Tab "Clima")
-
-Gestione 3 condizionatori collegati a Home Assistant:
-
--   **Soggiorno** (`climate.soggiorno`): Controllo completo con temperatura attuale e target
--   **Camera** (`climate.camera`): Controllo completo con temperatura attuale e target
--   **Chris** (`climate.chris`): Controllo completo con temperatura attuale e target
-
-**Funzionalità per ogni climatizzatore**:
-
--   Switch On/Off per accensione/spegnimento
--   Visualizzazione temperatura attuale della stanza
--   Visualizzazione temperatura target impostata
--   Pulsanti +/- per regolare la temperatura target
--   Controllo tramite servizi Home Assistant (`climate.turn_on`, `climate.turn_off`, `climate.set_temperature`)
-
-#### 3. **Controlli Generali** (Tab "Controlli")
-
--   **Luci**: Controllo illuminazione generale
--   **Ventola**: Gestione ventilazione
--   **Irrigazione**: Sistema di irrigazione automatico
--   **Allarme**: Sistema di sicurezza
--   **Musica**: Controllo audio
--   **Garage**: Apertura/chiusura garage
-
-#### 4. **Meteo** (Tab "Meteo")
-
--   **Condizioni attuali**: Temperatura, condizioni, umidità, vento
--   **Previsioni**: 3 giorni (Domenica, Lunedì, Martedì)
-
-### Caratteristiche Tecniche Avanzate
-
-#### Display e Touchscreen
-
-```yaml
-Display: RPI DPI RGB - 800x480
-Frequenza PCLK: 16MHz
-Touchscreen: GT911 capacitivo I2C
-Backlight: Controllato via CH422G
-```
-
-#### Sistema Anti-Burn
-
--   **Attivazione automatica**: 5 minuti dopo spegnimento backlight
--   **Schedulazione**: Attivo dalle 2:00 alle 5:35 (ogni ora: 5-35 minuti)
--   **Modalità**: "Snow effect" per prevenire burn-in
-
-#### Ottimizzazioni Prestazioni
-
--   **PSRAM OCTAL**: 80MHz per prestazioni elevate
--   **CPU**: 240MHz con cache ottimizzata
--   **Memoria**: 64KB data cache + 524KB RAM massima
--   **Flash**: QIO mode a 80MHz
-
-## Struttura File del Progetto
+## 📦 Struttura del Progetto
 
 ```
 plantdisplay/
 ├── plantdisplay.yaml          # Configurazione principale ESPHome
-├── lvgl_config.yaml           # Configurazione interfaccia LVGL
-├── secrets.yaml               # Credenziali WiFi e API (ignorato)
-├── .gitignore                 # File ignorati da Git
-├── .esphome/                  # Directory build ESPHome (ignorata)
-│   ├── build/                 # File di compilazione
-│   ├── storage/               # Configurazioni salvate
-│   └── idedata/               # Dati IDE
-├── assets/                    # Immagini per le piante
-│   ├── Anthurium.jpg         # Immagine Anthurium
-│   ├── Alstroemeria.jpg      # Immagine Alstroemeria
-│   └── Ggraptosedum.jpg      # Immagine Graptosedum
-└── README.md                  # Questa documentazione
+├── plant_sensors.yaml         # Template per sensori delle piante
+├── lvgl_config.yaml          # Configurazione interfaccia LVGL
+├── plant_card.yaml           # Template per le card delle piante
+├── fonts_config.yaml         # Configurazione font
+├── secrets.yaml              # Configurazioni sensibili
+├── hass_token                 # Token Home Assistant
+├── utils.sh                  # Script di utilità
+├── assets/                   # Immagini delle piante
+│   ├── Anthurium.jpg
+│   ├── Alstroemeria.jpg
+│   ├── Cactus.jpg
+│   └── Ggraptosedum.jpg
+├── fonts/                    # Font per l'interfaccia
+│   ├── Montserrat-*.ttf
+│   └── materialdesignicons.*
 ```
 
-## Configurazione Rete
-
--   **SSID**: "Marco&Krasi&Chris"
--   **Crittografia API**: Configurata per Home Assistant
--   **OTA**: Aggiornamenti Over-The-Air abilitati
--   **Bluetooth Proxy**: Attivo per dispositivi BLE
-
-## Pin Assignment ESP32-S3
-
-### Display RGB
-
-```
-PCLK: GPIO7
-DE: GPIO5
-HSYNC: GPIO46
-VSYNC: GPIO3
-Reset: CH422G Pin 3
-
-Dati RGB:
-- Rosso: GPIO1,2,42,41,40
-- Verde: GPIO39,0,45,48,47,21
-- Blu: GPIO14,38,18,17,10
-```
-
-### I2C e Controlli
-
-```
-I2C: SDA=GPIO8, SCL=GPIO9
-Touchscreen INT: GPIO4
-Touchscreen RST: CH422G Pin 1
-Backlight: CH422G Pin 2
-```
-
-## Automazioni Integrate
-
-### Gestione Energia
-
--   **Antiburn automatico**: Previene danneggiamento display
--   **Schedulazione notturna**: Attivazione automatica 2:00-5:35
--   **Gestione backlight**: Controllo intelligente illuminazione
-
-### Logging e Debug
-
--   **Logger ESPHome**: Abilitato per debug
--   **LVGL Debug**: Livello DEBUG attivo
--   **Boot sequence**: Sequenza di avvio controllata
-
-## Stato del Progetto
-
-Il sistema PlantDisplay è completamente operativo con le seguenti funzionalità:
-
--   **Piante**: Monitoraggio di 4 piante con dati in tempo reale per conduttività, Luce, temperatura, e umidità. Interfaccia grafica aggiornata e coerente.
--   **Climatizzazione**: Controllo di 4 condizionatori attraverso interfaccia LVGL.
--   **Controlli Generali**: Gestione di luci, ventole, irrigazione, allarme, musica e controllo garage.
--   **Meteo**: Condizioni attuali e previsioni a 3 giorni.
-
-**Aggiornamenti Recenti**:
-
--   **Font Uniformi**: Tutte le card delle piante ora usano font uniformi per un'interfaccia coerente.
--   **Risolto Problema dei Caratteri Speciali**: Sostituiti caratteri µ con u per compatibilità.
--   **Aggiornamento Dati Sensori**: Convalidata l'acquisizione in tempo reale dei dati dei sensori.
-
-## Sviluppi Futuri
-
-1. **Sensori fisici avanzati**: Migliorare l'integrazione con sensori fisici completi.
-2. **API Meteo**: Incorporare dati meteo in tempo reale tramite API.
-3. **Notifiche Push**: Implementare avvisi per condizioni critiche delle piante.
-4. **Grafici Storici**: Aggiungere grafici per trend storici dei parametri.
-5. **Integrazione Vocale**: Supporto per assistenti vocali.
-6. **Temi Giorno/Notte**: UI adattiva basata sull'orario.
-
-## Installazione e Utilizzo
+## 🚀 Installazione
 
 ### Prerequisiti
 
-1. **ESPHome**: Versione 2025.4.2 o superiore
-2. **Home Assistant**: Con API configurata
-3. **Hardware**: ESP32-S3 con display Waveshare 800x480
+1. **ESPHome** installato e aggiornato:
 
-### Setup Iniziale
-
-1. Clonare il repository del progetto
-2. Configurare `secrets.yaml` con:
-    ```yaml
-    wifi_ssid: "Il_Tuo_SSID"
-    wifi_password: "La_Tua_Password"
-    api_encryption_key: "La_Tua_Chiave_API"
-    ```
-3. Caricare le immagini nella cartella `assets/`
-4. Compilare e flashare il firmware:
     ```bash
-    esphome compile plantdisplay.yaml
-    esphome upload plantdisplay.yaml
+    pip install esphome
+    # o se preferisci usare Home Assistant Add-on
     ```
+
+2. **Home Assistant** con integrazione Xiaomi Mi Flora configurata
+
+3. **Token di accesso** Home Assistant (Long-lived access token)
 
 ### Configurazione Home Assistant
 
-Assicurarsi che i seguenti sensori siano configurati in Home Assistant:
+Prima di configurare il display, assicurati che i sensori Mi Flora siano configurati in Home Assistant:
 
--   `sensor.plant_sensor_b90c_conduttivita` (Anthurium 1)
--   `sensor.plant_sensor_a299_conduttivita` (Anthurium 2)
--   `sensor.plant_sensor_b90a_conduttivita` (Alstroemeria)
--   `sensor.plant_sensor_b90e_conduttivita` (Graptosedum)
+1. **Installa l'integrazione Xiaomi Mi Flora** in Home Assistant
+2. **Configura i sensori** e annota gli `entity_id` (es. `sensor.plant_sensor_b90c_conductivity`)
+3. **Crea un token di accesso** a lunga durata in Home Assistant:
+    - Vai su Profilo → Sicurezza → Token di accesso a lunga durata
+    - Crea un nuovo token e copialo
 
-E i relativi sensori per Luce, temperatura e umidità.
+### Configurazione Display
 
-## Note Tecniche
+1. **Clona o scarica il progetto**:
 
--   Il progetto utilizza componenti sperimentali ESP-IDF
--   Richiede ESPHome 2025.4.2+ per compatibilità LVGL
--   PSRAM necessaria per buffer display completo
--   CH422G richiede driver specifico per I/O expansion
--   Font Montserrat caricato automaticamente da Google Fonts
+    ```bash
+    git clone [url-repository]
+    cd plantdisplay
+    ```
+
+2. **Configura secrets.yaml**:
+
+    ```yaml
+    wifi_ssid: "TuaWiFi"
+    wifi_password: "PasswordWiFi"
+    api_encryption_key: "chiave-32-caratteri-esadecimali"
+    ota_password: "password-ota-sicura"
+    home_assistant_url: "http://192.168.1.100:8123" # URL del tuo Home Assistant
+    ```
+
+3. **Configura il token Home Assistant**:
+   Inserisci il tuo token Home Assistant a lunga durata nel file `hass_token`
+
+4. **Personalizza sensori**:
+   Modifica gli `entity_id` in `plantdisplay.yaml` per corrispondere ai tuoi sensori Mi Flora:
+    ```yaml
+    anthurium1: !include
+        file: plant_sensors.yaml
+        vars:
+            prefix: plant1
+            entity_prefix: sensor.il_tuo_sensore_miflora # Cambia qui
+    ```
+
+### Compilazione e Flash
+
+**Metodo 1: Script di utilità (consigliato)**
+
+```bash
+# Rendi eseguibile lo script
+chmod +x utils.sh
+
+# Compila il progetto
+./utils.sh compile
+
+# Flash su dispositivo (collega ESP32 via USB)
+./utils.sh upload
+
+# Monitora i log in tempo reale
+./utils.sh logs
+
+# Pulizia build (se necessario)
+./utils.sh clean
+```
+
+**Metodo 2: Comandi ESPHome diretti**
+
+```bash
+# Compila
+esphome compile plantdisplay.yaml
+
+# Upload (assicurati che ESP32-S3-Touch-LCD-7 sia collegato via USB)
+esphome upload plantdisplay.yaml
+
+# Monitora logs
+esphome logs plantdisplay.yaml
+```
+
+**Primo avvio:**
+
+1. Il display si accenderà e mostrerà la schermata di boot
+2. Si connetterà al WiFi (verifica nei log)
+3. Si connetterà a Home Assistant
+4. Mostrerà l'interfaccia principale con le piante
+
+## 🔧 Personalizzazione
+
+### Aggiungere Nuove Piante
+
+1. Aggiungi una nuova sezione in `plantdisplay.yaml`:
+
+    ```yaml
+    nuova_pianta: !include
+        file: plant_sensors.yaml
+        vars:
+            prefix: plant5
+            entity_prefix: sensor.nuovo_sensore
+            light: [100, 50000]
+            conductivity: [200, 1500]
+            temperature: [10.0, 30.0]
+            humidity: [20, 70]
+    ```
+
+2. Aggiungi l'immagine corrispondente in `assets/`
+
+3. Aggiorna `lvgl_config.yaml` per includere la nuova card
+
+### Modificare Soglie dei Sensori
+
+Modifica i valori nei parametri `vars` in `plantdisplay.yaml`:
+
+-   `light`: [min, max] lux
+-   `conductivity`: [min, max] µS/cm
+-   `temperature`: [min, max] °C
+-   `humidity`: [min, max] %
+
+## 📊 Monitoraggio
+
+Il display mostra per ogni pianta:
+
+-   **Immagine** della pianta
+-   **Umidità del suolo** con indicatore di stato
+-   **Conducibilità** (fertilità) con range ottimale
+-   **Temperatura** ambiente
+-   **Illuminazione** ricevuta
+-   **Frecce colorate** per valori fuori range
+
+### Codici Colore
+
+-   🟢 **Verde**: Valore ottimale
+-   🔴 **Rosso**: Valore fuori range
+-   ⬆️ **Freccia su**: Valore troppo alto
+-   ⬇️ **Freccia giù**: Valore troppo basso
+
+## 🔧 Risoluzione Problemi
+
+### Display Non Si Accende
+
+-   Verifica l'alimentazione USB-C del display ESP32-S3-Touch-LCD-7
+-   Controlla il cavo USB-C e l'alimentatore (minimo 2A)
+-   Verifica che il firmware sia stato caricato correttamente
+-   Controlla i log ESPHome per errori di avvio
+
+### Sensori Non Aggiornati
+
+-   Controlla connettività WiFi del display
+-   Verifica token Home Assistant nel file `hass_token`
+-   Controlla entity_id sensori in Home Assistant
+-   Verifica che i sensori Mi Flora siano online e funzionanti
+-   Controlla la configurazione dell'integrazione Mi Flora in Home Assistant
+
+### Font o Immagini Non Visualizzate
+
+-   Verifica che i file font siano presenti nella cartella `fonts/`
+-   Controlla che le immagini delle piante siano nella cartella `assets/`
+-   Verifica dimensioni e formato delle immagini (JPG, 120x120px consigliato)
+
+### Errori di Compilazione
+
+-   Aggiorna ESPHome all'ultima versione
+-   Verifica sintassi YAML
+-   Controlla percorsi font e immagini
+
+## 🤝 Contributi
+
+I contributi sono benvenuti! Per contribuire:
+
+1. Fork del repository
+2. Crea un branch per la feature (`git checkout -b feature/AmazingFeature`)
+3. Commit delle modifiche (`git commit -m 'Add some AmazingFeature'`)
+4. Push al branch (`git push origin feature/AmazingFeature`)
+5. Apri una Pull Request
+
+## 📄 Licenza
+
+Questo progetto è distribuito sotto licenza MIT. Vedi il file `LICENSE` per maggiori dettagli.
+
+## 🙏 Ringraziamenti
+
+-   [ESPHome](https://esphome.io/) per il framework
+-   [LVGL](https://lvgl.io/) per la libreria grafica
+-   [Home Assistant](https://www.home-assistant.io/) per l'integrazione
+-   Comunità open source per il supporto
+
+## 📞 Supporto
+
+Per problemi, domande o suggerimenti:
+
+-   **Issues**: Apri una [Issue](../../issues) su GitHub per bug o richieste di funzionalità
+-   **Documentazione**: Consulta la [documentazione ESPHome](https://esphome.io/) per problemi tecnici
+-   **Community**: Visita il [forum Home Assistant](https://community.home-assistant.io/) per supporto generale
+-   **Mi Flora**: Per problemi con i sensori, consulta la [documentazione integrazione Mi Flora](https://www.home-assistant.io/integrations/xiaomi_miio/)
+
+### FAQ
+
+**Q: Il display non mostra i dati dei sensori**  
+A: Verifica che gli `entity_id` in `plantdisplay.yaml` corrispondano esattamente a quelli in Home Assistant.
+
+**Q: Come trovo gli entity_id dei miei sensori Mi Flora?**  
+A: In Home Assistant, vai su Strumenti per sviluppatori → Stati e cerca "plant_sensor" o il nome del tuo sensore.
+
+**Q: Posso usare sensori diversi da Mi Flora?**  
+A: Sì, basta modificare gli `entity_id` per puntare ai tuoi sensori in Home Assistant.
 
 ---
 
-_Documentazione generata automaticamente - Ultima modifica: 26 Gennaio 2025_
+**⚠️ Importante**: Questo progetto richiede sensori delle piante già configurati e funzionanti in Home Assistant. Assicurati che i sensori Mi Flora siano operativi prima di configurare il display.
+
+# README generato automaticamene ;-)

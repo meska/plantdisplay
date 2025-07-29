@@ -12,41 +12,40 @@ globals:
 
 # Include file esterni per organizzazione modulare
 packages:
-    secrets: !include secrets.yaml
-    lvgl_ui: !include lvgl_config.yaml
+    lvgl_ui: !include include/lvgl_config.yaml
     anthurium1: !include
-        file: plant_sensors.yaml
+        file: include/plant_sensors.yaml
         vars:
             prefix: plant1
             entity_prefix: sensor.plant_sensor_b90c
-            light: [1, 4000]
+            light: [1, 10000]
             conductivity: [250, 2000]
             temperature: [15.0, 32.0]
             humidity: [16, 65]
     anthurium2: !include
-        file: plant_sensors.yaml
+        file: include/plant_sensors.yaml
         vars:
             prefix: plant2
             entity_prefix: sensor.plant_sensor_a299
-            light: [1, 4000]
+            light: [1, 10000]
             conductivity: [250, 2000]
             temperature: [15.0, 32.0]
             humidity: [16, 65]
     alstroemeria: !include
-        file: plant_sensors.yaml
+        file: include/plant_sensors.yaml
         vars:
             prefix: plant3
             entity_prefix: sensor.plant_sensor_b90a
-            light: [1, 4000]
+            light: [1, 10000]
             conductivity: [350, 2000]
             temperature: [8.0, 32.0]
             humidity: [15, 60]
     graptoseum: !include
-        file: plant_sensors.yaml
+        file: include/plant_sensors.yaml
         vars:
             prefix: plant4
             entity_prefix: sensor.plant_sensor_b90e
-            light: [1, 4000]
+            light: [1, 10000]
             conductivity: [300, 1000]
             temperature: [5.0, 35.0]
             humidity: [7, 50]
@@ -257,8 +256,35 @@ time:
             then:
                 - switch.turn_off: switch_antiburn
 
-# Sensori per le piante - Dati reali da Home Assistant
-sensor:
+# Configurazioni WiFi
+wifi:
+    ssid: !secret wifi_ssid
+    password: !secret wifi_password
+    power_save_mode: light
+    # # Configurazioni aggiuntive per stabilità
+    # reboot_timeout: 15min
+    # output_power: 20dB
+    # fast_connect: true
+    # # Fallback hotspot in caso di problemi di connessione
+    # ap:
+    #     ssid: "PlantDisplay Fallback"
+    #     password: "plantdisplay123"
+
+# Enable Home Assistant API
+api:
+    encryption:
+        key: !secret plantdisplay_api_key
+    # Configurazioni per migliorare la stabilità della connessione
+    # reboot_timeout: 15min
+    # services:
+    #     - service: force_update_sensors
+    #       then:
+    #           - logger.log: "Forced sensor update requested"
+
+# OTA Updates
+ota:
+    - platform: esphome
+      password: !secret plantdisplay_ota_password
 
 # Sensori per climatizzatori - utilizziamo text_sensor per lo stato completo
 text_sensor:

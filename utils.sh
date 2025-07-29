@@ -241,6 +241,7 @@ case "$1" in
     deploy)
         compile
         upload
+        monitor
         ;;
     logs)
         logs
