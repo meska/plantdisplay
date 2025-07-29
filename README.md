@@ -292,4 +292,4 @@ A: Sì, basta modificare gli `entity_id` per puntare ai tuoi sensori in Home Ass
 
 **⚠️ Importante**: Questo progetto richiede sensori delle piante già configurati e funzionanti in Home Assistant. Assicurati che i sensori Mi Flora siano operativi prima di configurare il display.
 
-# README generato automaticamene ;-)
+## README generato automaticamente ;-)
