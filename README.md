@@ -6,6 +6,10 @@ Un elegante display per il monitoraggio delle piante che visualizza i dati dei s
 ![Home Assistant](https://img.shields.io/badge/Home%20Assistant-Integrato-blue)
 ![ESP32](https://img.shields.io/badge/ESP32--S3-Compatible-orange)
 
+## Work in progress
+
+-   Attenzione questo è un progetto in corso per, al momento funziona solo la parte delle piante
+
 ## 🌱 Caratteristiche
 
 -   **Monitoraggio Multi-Pianta**: Supporta fino a 4 piante diverse con parametri personalizzabili
